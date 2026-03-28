@@ -1,0 +1,20 @@
+[
+  {
+    "event": "Freeze Warning",
+    "headline": "Freeze Warning issued March 28 at 1:08PM EDT until March 29 at 10:00AM EDT by NWS Charleston WV",
+    "severity": "Moderate",
+    "area": "Greenup; Carter; Boyd; Lawrence; Dickenson; Buchanan; Wayne; Lincoln; Mingo; Logan; Boone; McDowell; Wyoming"
+  },
+  {
+    "event": "Special Weather Statement",
+    "headline": "Special Weather Statement issued March 28 at 7:55AM EDT by NWS Blacksburg VA",
+    "severity": "Moderate",
+    "area": "Ashe; Alleghany; Surry; Stokes; Rockingham; Caswell; Watauga; Wilkes; Yadkin; Smyth; Wythe; Grayson; Carroll; Floyd; Franklin"
+  },
+  {
+    "event": "Special Weather Statement",
+    "headline": "Special Weather Statement issued March 28 at 5:11AM EDT by NWS Baltimore MD/Washington DC",
+    "severity": "Moderate",
+    "area": "District of Columbia; Cecil; Southern Baltimore; Prince Georges; Anne Arundel; Charles; Calvert; Northwest Montgomery; Central and Southeast Montgomery; Northwest Howard; Central and Southeast Howard; Southeast Harford; Augusta; Rockingham; Shenandoah; Page; Warren; Greene; Madison; Rappahannock; Culpeper; Fairfax; Arlington/Falls Church/Alexandria; Stafford; King George; Northern Fauquier; Southern Fauquier; Western Loudoun; Eastern Loudoun; Northern Virginia Blue Ridge; Central Virginia Blue Ridge; Northwest Prince William; Central and Southeast Prince William/Manassas/Manassas Park"
+  }
+]
