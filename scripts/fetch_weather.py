@@ -17,7 +17,8 @@ def fetch_weather():
             "event": props["event"],
             "headline": props["headline"],
             "severity": props["severity"],
-            "area": props["areaDesc"]
+            "area": props["areaDesc"],
+            "geometry": alert.get("geometry")
         })
     
     with open("output/weather_alerts.json", "w") as f:
