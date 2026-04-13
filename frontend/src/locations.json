@@ -1,0 +1,1316 @@
+[
+  {
+    "name": "Duke Street Liberty",
+    "type": "fuel",
+    "lat": 38.8126769,
+    "lon": -77.1258168
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8175991,
+    "lon": -77.1424937
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.8187069,
+    "lon": -77.1436155
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8099812,
+    "lon": -77.0506021
+  },
+  {
+    "name": "Old Town Mart",
+    "type": "fuel",
+    "lat": 38.8139433,
+    "lon": -77.0453786
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8132473,
+    "lon": -77.0449183
+  },
+  {
+    "name": "Liberty",
+    "type": "fuel",
+    "lat": 38.812518,
+    "lon": -77.044957
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.812123,
+    "lon": -77.045106
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.8964189,
+    "lon": -77.0726392
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.991893,
+    "lon": -77.031655
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9924832,
+    "lon": -77.0962555
+  },
+  {
+    "name": "Liberty",
+    "type": "fuel",
+    "lat": 38.9782024,
+    "lon": -77.0991976
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9931627,
+    "lon": -77.023901
+  },
+  {
+    "name": "W Express Gas Station",
+    "type": "fuel",
+    "lat": 38.914309,
+    "lon": -77.041887
+  },
+  {
+    "name": "Georgetown Exxon",
+    "type": "fuel",
+    "lat": 38.910591,
+    "lon": -77.0646536
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.9105921,
+    "lon": -77.065241
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9442447,
+    "lon": -77.0779012
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.8128362,
+    "lon": -77.112618
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.9535103,
+    "lon": -77.0825329
+  },
+  {
+    "name": "Unknown",
+    "type": "supermarket",
+    "lat": 38.9241523,
+    "lon": -77.0522256
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.9218478,
+    "lon": -77.0383963
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.9308461,
+    "lon": -77.0318599
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.9041925,
+    "lon": -77.0531294
+  },
+  {
+    "name": "Yes! Organic",
+    "type": "supermarket",
+    "lat": 38.9186373,
+    "lon": -77.0317099
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9094423,
+    "lon": -77.0335553
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.944499,
+    "lon": -77.0631702
+  },
+  {
+    "name": "Wagshal's",
+    "type": "supermarket",
+    "lat": 38.9331586,
+    "lon": -77.0853629
+  },
+  {
+    "name": "Yes! Organic",
+    "type": "supermarket",
+    "lat": 38.9351083,
+    "lon": -77.0579407
+  },
+  {
+    "name": "Best World",
+    "type": "supermarket",
+    "lat": 38.9309584,
+    "lon": -77.0385457
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9491011,
+    "lon": -77.0792124
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.934323,
+    "lon": -77.0730461
+  },
+  {
+    "name": "Yes! Organic",
+    "type": "supermarket",
+    "lat": 38.9217967,
+    "lon": -77.0437087
+  },
+  {
+    "name": "Magruder's",
+    "type": "supermarket",
+    "lat": 38.965605,
+    "lon": -77.0763186
+  },
+  {
+    "name": "Yes! Organic Market",
+    "type": "supermarket",
+    "lat": 38.9409973,
+    "lon": -77.0255304
+  },
+  {
+    "name": "Rodmans Gourmet Grocery & Pharmacy",
+    "type": "supermarket",
+    "lat": 38.9561559,
+    "lon": -77.0837082
+  },
+  {
+    "name": "New Star Supermarket",
+    "type": "supermarket",
+    "lat": 38.9194256,
+    "lon": -77.0003155
+  },
+  {
+    "name": "Avenue Supermarket",
+    "type": "supermarket",
+    "lat": 38.9513947,
+    "lon": -77.0123645
+  },
+  {
+    "name": "Odd Provisions",
+    "type": "supermarket",
+    "lat": 38.9308994,
+    "lon": -77.027835
+  },
+  {
+    "name": "Brightwood Supermarket",
+    "type": "supermarket",
+    "lat": 38.9563932,
+    "lon": -77.0118455
+  },
+  {
+    "name": "Capitol Supermarket",
+    "type": "supermarket",
+    "lat": 38.9067904,
+    "lon": -77.0266901
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9821736,
+    "lon": -77.0263491
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8950203,
+    "lon": -77.189078
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.9035899,
+    "lon": -77.0187533
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9112824,
+    "lon": -77.0107588
+  },
+  {
+    "name": "Amoco",
+    "type": "fuel",
+    "lat": 38.9223308,
+    "lon": -77.0730164
+  },
+  {
+    "name": "Spring Valley Exxon",
+    "type": "fuel",
+    "lat": 38.9459399,
+    "lon": -77.0964358
+  },
+  {
+    "name": "Circle Exxon",
+    "type": "fuel",
+    "lat": 38.9637502,
+    "lon": -77.0745209
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9549958,
+    "lon": -77.0694724
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.8110954,
+    "lon": -77.0447977
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.885715,
+    "lon": -77.1177704
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.9325726,
+    "lon": -77.1805265
+  },
+  {
+    "name": "Balducci's",
+    "type": "supermarket",
+    "lat": 38.9310328,
+    "lon": -77.1747222
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.9058621,
+    "lon": -77.0056211
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.945234,
+    "lon": -77.032453
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8640872,
+    "lon": -77.0842727
+  },
+  {
+    "name": "J & K Shell",
+    "type": "fuel",
+    "lat": 38.968002,
+    "lon": -77.0271067
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.9400524,
+    "lon": -77.0253148
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9050325,
+    "lon": -77.0484622
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9796869,
+    "lon": -77.0260354
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9327353,
+    "lon": -77.0242137
+  },
+  {
+    "name": "Marathon",
+    "type": "fuel",
+    "lat": 38.9136558,
+    "lon": -77.017315
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9140784,
+    "lon": -77.0160517
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.9652368,
+    "lon": -77.0024224
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9567463,
+    "lon": -77.0156877
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.862393,
+    "lon": -77.0138296
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.8867204,
+    "lon": -77.0947148
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8218189,
+    "lon": -77.0014102
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.9933627,
+    "lon": -77.024375
+  },
+  {
+    "name": "Annandale Service Center",
+    "type": "fuel",
+    "lat": 38.833099,
+    "lon": -77.188487
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.8303309,
+    "lon": -77.1938975
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8305189,
+    "lon": -77.1920414
+  },
+  {
+    "name": "Annandale Citgo",
+    "type": "fuel",
+    "lat": 38.8319648,
+    "lon": -77.1917067
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.8325375,
+    "lon": -77.1898613
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9074942,
+    "lon": -77.0293551
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8619253,
+    "lon": -77.0887269
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8186792,
+    "lon": -77.1399689
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8208162,
+    "lon": -77.0573644
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.820835,
+    "lon": -77.0579434
+  },
+  {
+    "name": "Fenton Citgo",
+    "type": "fuel",
+    "lat": 38.9944389,
+    "lon": -77.0238668
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9341148,
+    "lon": -77.1767299
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.8272413,
+    "lon": -77.0887133
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8266083,
+    "lon": -77.0866993
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.8774173,
+    "lon": -77.0172181
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.9629623,
+    "lon": -77.1070071
+  },
+  {
+    "name": "Liberty",
+    "type": "fuel",
+    "lat": 38.8776157,
+    "lon": -77.1241558
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8487663,
+    "lon": -77.0989707
+  },
+  {
+    "name": "Alexandria Exxon",
+    "type": "fuel",
+    "lat": 38.8002923,
+    "lon": -77.0483099
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.807065,
+    "lon": -77.0805777
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8113123,
+    "lon": -77.1016696
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.830148,
+    "lon": -77.1093181
+  },
+  {
+    "name": "Barber's Auto Service",
+    "type": "fuel",
+    "lat": 38.8376049,
+    "lon": -77.1038372
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8667817,
+    "lon": -77.1945705
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8688354,
+    "lon": -77.1461763
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8000612,
+    "lon": -77.1848193
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.8748091,
+    "lon": -77.0802663
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.9981382,
+    "lon": -77.0019633
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8423775,
+    "lon": -77.0634339
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8442075,
+    "lon": -77.0779755
+  },
+  {
+    "name": "Liberty",
+    "type": "fuel",
+    "lat": 38.8551181,
+    "lon": -77.137368
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.848588,
+    "lon": -77.1245993
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.9005704,
+    "lon": -77.0558922
+  },
+  {
+    "name": "American Majestic",
+    "type": "fuel",
+    "lat": 38.8756359,
+    "lon": -77.1992106
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.869339,
+    "lon": -77.1742621
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.8658149,
+    "lon": -77.1952276
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.8657877,
+    "lon": -77.1945463
+  },
+  {
+    "name": "Citgo",
+    "type": "fuel",
+    "lat": 38.8938827,
+    "lon": -77.1888202
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.842306,
+    "lon": -77.05218
+  },
+  {
+    "name": "FoodStar",
+    "type": "supermarket",
+    "lat": 38.8365439,
+    "lon": -77.0622259
+  },
+  {
+    "name": "MOM's Organic Market",
+    "type": "supermarket",
+    "lat": 38.8411512,
+    "lon": -77.0627734
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.9077873,
+    "lon": -77.0237085
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.9383724,
+    "lon": -77.0249103
+  },
+  {
+    "name": "Panamericana",
+    "type": "supermarket",
+    "lat": 38.9358559,
+    "lon": -77.0329877
+  },
+  {
+    "name": "Streets Market and Cafe",
+    "type": "supermarket",
+    "lat": 38.9208499,
+    "lon": -77.0321303
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.9161261,
+    "lon": -77.0322113
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.9090968,
+    "lon": -77.0226834
+  },
+  {
+    "name": "Walmart Supercenter",
+    "type": "supermarket",
+    "lat": 38.9620325,
+    "lon": -77.0273083
+  },
+  {
+    "name": "Price's Grocery",
+    "type": "supermarket",
+    "lat": 38.9515737,
+    "lon": -77.0082994
+  },
+  {
+    "name": "Sunoco",
+    "type": "fuel",
+    "lat": 38.9267017,
+    "lon": -77.0262915
+  },
+  {
+    "name": "Valero",
+    "type": "fuel",
+    "lat": 38.9003873,
+    "lon": -77.0566965
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.978214,
+    "lon": -77.0905786
+  },
+  {
+    "name": "New Grand Mart",
+    "type": "supermarket",
+    "lat": 38.81699,
+    "lon": -77.1433021
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.9634689,
+    "lon": -77.1020903
+  },
+  {
+    "name": "Mobil",
+    "type": "fuel",
+    "lat": 38.9631273,
+    "lon": -77.1015569
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.9749971,
+    "lon": -77.018853
+  },
+  {
+    "name": "Brookville Market",
+    "type": "supermarket",
+    "lat": 38.9809393,
+    "lon": -77.0711523
+  },
+  {
+    "name": "Giant",
+    "type": "fuel",
+    "lat": 38.9947205,
+    "lon": -77.0776194
+  },
+  {
+    "name": "Gulf",
+    "type": "fuel",
+    "lat": 38.9960314,
+    "lon": -77.0287445
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.877828,
+    "lon": -77.1218457
+  },
+  {
+    "name": "BP",
+    "type": "fuel",
+    "lat": 38.8519276,
+    "lon": -77.1328226
+  },
+  {
+    "name": "Citgo",
+    "type": "fuel",
+    "lat": 38.9626726,
+    "lon": -77.105993
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9663011,
+    "lon": -77.1043318
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.8760895,
+    "lon": -77.0002448
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8953931,
+    "lon": -77.0032408
+  },
+  {
+    "name": "Aldi",
+    "type": "supermarket",
+    "lat": 38.879594,
+    "lon": -77.1720419
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.8903463,
+    "lon": -77.1659109
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.8413554,
+    "lon": -77.0900557
+  },
+  {
+    "name": "Unknown",
+    "type": "fuel",
+    "lat": 38.9949083,
+    "lon": -77.0768797
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.9351856,
+    "lon": -77.0579966
+  },
+  {
+    "name": "Al-Amal Super Market",
+    "type": "supermarket",
+    "lat": 38.8411825,
+    "lon": -77.1190576
+  },
+  {
+    "name": "Leyu Market",
+    "type": "supermarket",
+    "lat": 38.8475919,
+    "lon": -77.1277128
+  },
+  {
+    "name": "Anderson Sunoco",
+    "type": "fuel",
+    "lat": 38.896235,
+    "lon": -77.1391194
+  },
+  {
+    "name": "Foreign Car Service Center",
+    "type": "fuel",
+    "lat": 38.8810265,
+    "lon": -77.0908622
+  },
+  {
+    "name": "Lyon Park Liberty",
+    "type": "fuel",
+    "lat": 38.8806757,
+    "lon": -77.0910144
+  },
+  {
+    "name": "Nazret Market",
+    "type": "supermarket",
+    "lat": 38.8039787,
+    "lon": -77.1322926
+  },
+  {
+    "name": "Tiger Market",
+    "type": "supermarket",
+    "lat": 38.8416332,
+    "lon": -77.0630845
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.9928729,
+    "lon": -77.0968915
+  },
+  {
+    "name": "India A-1 Grocery",
+    "type": "supermarket",
+    "lat": 38.8969003,
+    "lon": -77.1257729
+  },
+  {
+    "name": "Walmart Supercenter",
+    "type": "supermarket",
+    "lat": 38.9578188,
+    "lon": -77.0022035
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.8627541,
+    "lon": -77.0546037
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8436878,
+    "lon": -77.0851982
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.880363,
+    "lon": -77.0051123
+  },
+  {
+    "name": "Megamart Express",
+    "type": "supermarket",
+    "lat": 38.8562453,
+    "lon": -77.1129434
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.812682,
+    "lon": -77.043981
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.9074588,
+    "lon": -77.0005857
+  },
+  {
+    "name": "Grocery Outlet",
+    "type": "supermarket",
+    "lat": 38.9925251,
+    "lon": -77.0487834
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.883556,
+    "lon": -77.17384
+  },
+  {
+    "name": "Lidl Express",
+    "type": "supermarket",
+    "lat": 38.8435041,
+    "lon": -77.0519474
+  },
+  {
+    "name": "Global Food",
+    "type": "supermarket",
+    "lat": 38.8313988,
+    "lon": -77.1253163
+  },
+  {
+    "name": "La Bodega Supermarket",
+    "type": "supermarket",
+    "lat": 38.8700489,
+    "lon": -77.1466806
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.950041,
+    "lon": -77.1193803
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.9207504,
+    "lon": -77.0436208
+  },
+  {
+    "name": "Nazret Market",
+    "type": "supermarket",
+    "lat": 38.9912707,
+    "lon": -77.0270141
+  },
+  {
+    "name": "Liberty",
+    "type": "fuel",
+    "lat": 38.8430069,
+    "lon": -77.0769874
+  },
+  {
+    "name": "Safeway",
+    "type": "supermarket",
+    "lat": 38.8750067,
+    "lon": -77.198692
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.8810801,
+    "lon": -77.0849366
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8862442,
+    "lon": -77.0007573
+  },
+  {
+    "name": "Shell",
+    "type": "fuel",
+    "lat": 38.8184765,
+    "lon": -77.1428515
+  },
+  {
+    "name": "Marathon",
+    "type": "fuel",
+    "lat": 38.8527286,
+    "lon": -77.12483
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9510594,
+    "lon": -77.0270762
+  },
+  {
+    "name": "New Hampshire Ave DC Valero",
+    "type": "fuel",
+    "lat": 38.9564609,
+    "lon": -77.0098233
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8323091,
+    "lon": -77.0503433
+  },
+  {
+    "name": "Aldi",
+    "type": "supermarket",
+    "lat": 38.8499491,
+    "lon": -77.1265729
+  },
+  {
+    "name": "Culmore Supermarket",
+    "type": "supermarket",
+    "lat": 38.8549472,
+    "lon": -77.1389593
+  },
+  {
+    "name": "The Fresh Market",
+    "type": "supermarket",
+    "lat": 38.8290056,
+    "lon": -77.0926307
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.9557777,
+    "lon": -77.0003428
+  },
+  {
+    "name": "K Market International",
+    "type": "supermarket",
+    "lat": 38.8307186,
+    "lon": -77.1884077
+  },
+  {
+    "name": "Speedway",
+    "type": "fuel",
+    "lat": 38.829869,
+    "lon": -77.1904987
+  },
+  {
+    "name": "MOM's Organic Market",
+    "type": "supermarket",
+    "lat": 38.8962383,
+    "lon": -77.0863249
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.9065572,
+    "lon": -77.0484327
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9194079,
+    "lon": -77.0248026
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.8507224,
+    "lon": -77.1327462
+  },
+  {
+    "name": "Wegmans",
+    "type": "supermarket",
+    "lat": 38.9407445,
+    "lon": -77.0772853
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.989994,
+    "lon": -77.0957571
+  },
+  {
+    "name": "Amazon Fresh",
+    "type": "supermarket",
+    "lat": 38.9962949,
+    "lon": -77.0753091
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.939996,
+    "lon": -77.1364123
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.9055,
+    "lon": -77.0071569
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.9050411,
+    "lon": -77.0293815
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.8408733,
+    "lon": -77.1071391
+  },
+  {
+    "name": "Giant",
+    "type": "supermarket",
+    "lat": 38.8172503,
+    "lon": -77.0027758
+  },
+  {
+    "name": "African Grocery",
+    "type": "supermarket",
+    "lat": 38.8164626,
+    "lon": -77.1429641
+  },
+  {
+    "name": "Wegmans",
+    "type": "supermarket",
+    "lat": 38.8030542,
+    "lon": -77.0725543
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9760134,
+    "lon": -77.0283506
+  },
+  {
+    "name": "Lidl",
+    "type": "supermarket",
+    "lat": 38.9294707,
+    "lon": -77.0329002
+  },
+  {
+    "name": "Bangkok 54 Grocery",
+    "type": "supermarket",
+    "lat": 38.8624998,
+    "lon": -77.0877782
+  },
+  {
+    "name": "Crown",
+    "type": "fuel",
+    "lat": 38.9238407,
+    "lon": -77.0324184
+  },
+  {
+    "name": "Mobil",
+    "type": "fuel",
+    "lat": 38.9134417,
+    "lon": -77.0180398
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.8041234,
+    "lon": -77.0598985
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.9612896,
+    "lon": -77.0870137
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.909467,
+    "lon": -77.0554477
+  },
+  {
+    "name": "Lidl",
+    "type": "supermarket",
+    "lat": 38.8229045,
+    "lon": -77.1607938
+  },
+  {
+    "name": "Asia supermarket",
+    "type": "supermarket",
+    "lat": 38.8736203,
+    "lon": -77.1488726
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.8770965,
+    "lon": -77.1102105
+  },
+  {
+    "name": "Harris Teeter",
+    "type": "supermarket",
+    "lat": 38.865068,
+    "lon": -77.0616321
+  },
+  {
+    "name": "Super A Market",
+    "type": "supermarket",
+    "lat": 38.8767979,
+    "lon": -77.1923232
+  },
+  {
+    "name": "Amazon Fresh",
+    "type": "supermarket",
+    "lat": 38.839201,
+    "lon": -77.0502074
+  },
+  {
+    "name": "Noble Gas Inc",
+    "type": "fuel",
+    "lat": 38.8789237,
+    "lon": -77.1805677
+  },
+  {
+    "name": "Lidl",
+    "type": "supermarket",
+    "lat": 38.9419851,
+    "lon": -77.0770848
+  },
+  {
+    "name": "Marhaba Market",
+    "type": "supermarket",
+    "lat": 38.8409144,
+    "lon": -77.1199505
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8530163,
+    "lon": -77.0528905
+  },
+  {
+    "name": "Exxon",
+    "type": "fuel",
+    "lat": 38.8882146,
+    "lon": -77.1602979
+  },
+  {
+    "name": "Guru Groceries and Chaat House",
+    "type": "supermarket",
+    "lat": 38.987865,
+    "lon": -77.0991288
+  },
+  {
+    "name": "Streets Market",
+    "type": "supermarket",
+    "lat": 38.93012,
+    "lon": -77.0381304
+  },
+  {
+    "name": "Mom's",
+    "type": "supermarket",
+    "lat": 38.9449713,
+    "lon": -77.0643081
+  },
+  {
+    "name": "Lidl",
+    "type": "supermarket",
+    "lat": 38.9860689,
+    "lon": -77.0960656
+  },
+  {
+    "name": "IYMA Daily Essentials",
+    "type": "supermarket",
+    "lat": 38.9563485,
+    "lon": -77.0180265
+  },
+  {
+    "name": "Mega Supermarket",
+    "type": "supermarket",
+    "lat": 38.828293,
+    "lon": -77.1902131
+  },
+  {
+    "name": "Whole Foods Market",
+    "type": "supermarket",
+    "lat": 38.8821461,
+    "lon": -77.1705468
+  },
+  {
+    "name": "Halal City Market",
+    "type": "supermarket",
+    "lat": 38.891498,
+    "lon": -77.1863287
+  },
+  {
+    "name": "Trader Joe's",
+    "type": "supermarket",
+    "lat": 38.9605576,
+    "lon": -77.0853016
+  }
+]
