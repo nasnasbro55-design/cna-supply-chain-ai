@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ZoomControl } from 'react-leaflet';
 
 // Karina's real data (this is a subset, so swap for API call when Ethan's backend is ready)
 const LOCATIONS = [
@@ -215,6 +217,7 @@ export default function Dashboard() {
   const [simSeverity, setSimSeverity] = useState(3);
   const [simResults, setSimResults] = useState(null);
   const [simRunning, setSimRunning] = useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
 
   useEffect(() => {
     sessionRef.current = setInterval(() => setSessionMinutes(m => m + 1), 60000);
@@ -289,6 +292,12 @@ export default function Dashboard() {
             {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" })}
           </span>
           <button
+            onClick={() => setAnalyticsOpen(!analyticsOpen)}
+            style={{ background: analyticsOpen ? "#0d2d1a" : "transparent", border: `1px solid ${analyticsOpen ? C.green : C.dim}`, color: analyticsOpen ? C.green : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
+          >
+            ▲ ANALYTICS
+          </button>
+          <button
             onClick={() => { setSimOpen(!simOpen); clearSimulation(); }}
             style={{ background: simOpen ? "#2d1b4e" : "transparent", border: `1px solid ${simOpen ? "#a855f7" : C.dim}`, color: simOpen ? "#d8b4fe" : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
           >
@@ -304,7 +313,88 @@ export default function Dashboard() {
       </div>
 
       <FatigueBanner sessionMinutes={sessionMinutes} />
+      {analyticsOpen && (
+        <div style={{ background: C.surface, borderBottom: `1px solid ${C.green}`, padding: "16px 20px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, flexShrink: 0 }}>
+          
+          
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>ALERTS BY SEVERITY</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <BarChart data={[
+                { severity: "High", count: NLP_ALERTS.filter(a => a.severity === "high").length, fill: C.red },
+                { severity: "Medium", count: NLP_ALERTS.filter(a => a.severity === "medium").length, fill: C.amber },
+                { severity: "Low", count: NLP_ALERTS.filter(a => a.severity === "low").length, fill: C.green },
+              ]}>
+                <XAxis dataKey="severity" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Bar dataKey="count" radius={[3, 3, 0, 0]}>
+                  {[C.red, C.amber, C.green].map((color, i) => <Cell key={i} fill={color} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>SENTIMENT SCORE OVER TIME</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <LineChart data={[...NLP_ALERTS].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(a => ({
+                time: new Date(a.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+                score: Math.abs(a.sentiment_score),
+                type: a.type,
+              }))}>
+                <XAxis dataKey="time" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} domain={[0, 1]} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Line type="monotone" dataKey="score" stroke={C.red} strokeWidth={2} dot={{ fill: C.red, r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>FUEL VS FOOD ALERTS</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "Fuel", value: NLP_ALERTS.filter(a => a.type === "fuel").length },
+                    { name: "Food", value: NLP_ALERTS.filter(a => a.type === "food").length },
+                  ]}
+                  cx="50%" cy="50%" innerRadius={30} outerRadius={50} dataKey="value"
+                >
+                  <Cell fill={C.amber} />
+                  <Cell fill={C.green} />
+                </Pie>
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 4 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.amber }} />Fuel
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green }} />Food
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>MODEL CONFIDENCE BY ALERT</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <AreaChart data={NLP_ALERTS.map((a, i) => ({
+                name: `Alert ${i + 1}`,
+                confidence: Math.round(a.confidence * 100),
+              }))}>
+                <XAxis dataKey="name" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={25} domain={[0, 100]} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Area type="monotone" dataKey="confidence" stroke={C.blue} fill={C.blueBg} strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+      )}
       <div style={{ display: "grid", gridTemplateColumns: "240px 1fr 240px", flex: 1, overflow: "hidden" }}>
 
         <div style={{ background: C.surface, borderRight: `1px solid ${C.border}`, display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -386,14 +476,14 @@ export default function Dashboard() {
             center={mapCenter}
             zoom={11}
             style={{ height: "100%", width: "100%", background: C.bg }}
-            zoomControl={false}
+            zoomControl={true}
           >
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             />
             <MapController center={mapCenter} />
-
+            <ZoomControl position="bottomright" />
             {layers.fuel && LOCATIONS.filter(l => l.type === "fuel").map((loc, i) => (
               <CircleMarker key={`fuel-${i}`} center={[loc.lat, loc.lon]} radius={5}
                 pathOptions={{ color: C.amber, fillColor: C.amber, fillOpacity: 0.8, weight: 1 }}>
