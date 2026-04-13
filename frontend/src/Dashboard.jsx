@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ZoomControl } from 'react-leaflet';
 
 // Karina's real data 
 import LOCATIONS from './locations.json';
@@ -192,6 +194,12 @@ export default function Dashboard() {
   const [sessionMinutes, setSessionMinutes] = useState(0);
   const [mapCenter] = useState([38.88, -77.1]);
   const sessionRef = useRef(null);
+  const [simOpen, setSimOpen] = useState(false);
+  const [simScenario, setSimScenario] = useState("weather");
+  const [simSeverity, setSimSeverity] = useState(3);
+  const [simResults, setSimResults] = useState(null);
+  const [simRunning, setSimRunning] = useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
 
   useEffect(() => {
     sessionRef.current = setInterval(() => setSessionMinutes(m => m + 1), 60000);
@@ -199,6 +207,44 @@ export default function Dashboard() {
   }, []);
 
   const toggleLayer = (key) => setLayers(l => ({ ...l, [key]: !l[key] }));
+
+  const runSimulation = () => {
+    setSimRunning(true);
+    setTimeout(() => {
+      const atRisk = [];
+      const fuelStations = LOCATIONS.filter(l => l.type === "fuel");
+      const foodStores = LOCATIONS.filter(l => l.type === "supermarket");
+      if (simScenario === "weather") {
+        if (simSeverity >= 2) fuelStations.forEach(l => atRisk.push({ ...l, reason: "Fuel delivery routes blocked by weather", riskLevel: simSeverity >= 4 ? "high" : "medium" }));
+        if (simSeverity >= 3) foodStores.forEach(l => atRisk.push({ ...l, reason: "Restocking trucks unable to reach store", riskLevel: simSeverity >= 4 ? "high" : "medium" }));
+      } else if (simScenario === "fuel_demand") {
+        const count = Math.ceil(fuelStations.length * (simSeverity / 5));
+        fuelStations.slice(0, count).forEach(l => atRisk.push({ ...l, reason: "High demand exceeds available supply", riskLevel: simSeverity >= 4 ? "high" : "medium" }));
+      }  else if (simScenario === "congestion") {
+         const haversine = (lat1, lon1, lat2, lon2) => {
+          const R = 3958.8;
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) ** 2;
+          return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        };
+        const congestedCameras = CAMERAS.filter(c => c.status === "heavy" || c.status === "congested");
+        const radiusMiles = simSeverity * 0.8;
+        LOCATIONS.forEach(l => {
+          const nearCamera = congestedCameras.find(c => haversine(l.lat, l.lon, c.lat, c.lon) <= radiusMiles);
+          if (nearCamera) atRisk.push({
+            ...l,
+            reason: `Within ${radiusMiles.toFixed(1)}mi of congested camera: ${nearCamera.name}`,
+            riskLevel: simSeverity >= 4 ? "high" : "medium"
+          });
+        });
+      }
+      setSimResults({ atRisk, scenario: simScenario, severity: simSeverity, timestamp: new Date().toLocaleTimeString() });
+      setSimRunning(false);
+    }, 1200);
+  };
+
+  const clearSimulation = () => setSimResults(null);
 
   const highAlerts = NLP_ALERTS.filter(a => a.severity === "high").length;
   const fuelNeg = Math.round(Math.abs(NLP_ALERTS.filter(a => a.type === "fuel").reduce((s, a) => s + a.sentiment_score, 0) / NLP_ALERTS.filter(a => a.type === "fuel").length) * 100);
@@ -228,6 +274,18 @@ export default function Dashboard() {
             {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" })}
           </span>
           <button
+            onClick={() => setAnalyticsOpen(!analyticsOpen)}
+            style={{ background: analyticsOpen ? "#0d2d1a" : "transparent", border: `1px solid ${analyticsOpen ? C.green : C.dim}`, color: analyticsOpen ? C.green : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
+          >
+            ▲ ANALYTICS
+          </button>
+          <button
+            onClick={() => { setSimOpen(!simOpen); clearSimulation(); }}
+            style={{ background: simOpen ? "#2d1b4e" : "transparent", border: `1px solid ${simOpen ? "#a855f7" : C.dim}`, color: simOpen ? "#d8b4fe" : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
+          >
+            ◈ WHAT-IF SIM
+          </button>
+          <button
             onClick={() => setLowBandwidth(true)}
             style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
           >
@@ -237,7 +295,88 @@ export default function Dashboard() {
       </div>
 
       <FatigueBanner sessionMinutes={sessionMinutes} />
+      {analyticsOpen && (
+        <div style={{ background: C.surface, borderBottom: `1px solid ${C.green}`, padding: "16px 20px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, flexShrink: 0 }}>
+          
+          
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>ALERTS BY SEVERITY</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <BarChart data={[
+                { severity: "High", count: NLP_ALERTS.filter(a => a.severity === "high").length, fill: C.red },
+                { severity: "Medium", count: NLP_ALERTS.filter(a => a.severity === "medium").length, fill: C.amber },
+                { severity: "Low", count: NLP_ALERTS.filter(a => a.severity === "low").length, fill: C.green },
+              ]}>
+                <XAxis dataKey="severity" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Bar dataKey="count" radius={[3, 3, 0, 0]}>
+                  {[C.red, C.amber, C.green].map((color, i) => <Cell key={i} fill={color} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>SENTIMENT SCORE OVER TIME</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <LineChart data={[...NLP_ALERTS].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(a => ({
+                time: new Date(a.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+                score: Math.abs(a.sentiment_score),
+                type: a.type,
+              }))}>
+                <XAxis dataKey="time" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} domain={[0, 1]} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Line type="monotone" dataKey="score" stroke={C.red} strokeWidth={2} dot={{ fill: C.red, r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>FUEL VS FOOD ALERTS</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "Fuel", value: NLP_ALERTS.filter(a => a.type === "fuel").length },
+                    { name: "Food", value: NLP_ALERTS.filter(a => a.type === "food").length },
+                  ]}
+                  cx="50%" cy="50%" innerRadius={30} outerRadius={50} dataKey="value"
+                >
+                  <Cell fill={C.amber} />
+                  <Cell fill={C.green} />
+                </Pie>
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 4 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.amber }} />Fuel
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green }} />Food
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>MODEL CONFIDENCE BY ALERT</div>
+            <ResponsiveContainer width="100%" height={120}>
+              <AreaChart data={NLP_ALERTS.map((a, i) => ({
+                name: `Alert ${i + 1}`,
+                confidence: Math.round(a.confidence * 100),
+              }))}>
+                <XAxis dataKey="name" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={25} domain={[0, 100]} />
+                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
+                <Area type="monotone" dataKey="confidence" stroke={C.blue} fill={C.blueBg} strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+      )}
       <div style={{ display: "grid", gridTemplateColumns: "240px 1fr 240px", flex: 1, overflow: "hidden" }}>
 
         <div style={{ background: C.surface, borderRight: `1px solid ${C.border}`, display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -253,7 +392,7 @@ export default function Dashboard() {
               ].map((m, i) => (
                 <div key={i} style={{ background: C.surface2, borderRadius: 6, padding: "8px 10px", border: `1px solid ${C.border}` }}>
                   <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: .5, marginBottom: 4 }}>{m.label.toUpperCase()}</div>
-                  <div style={{ fontSize: 22, fontWeight: 600, color: m.color, fontFamily: C.font }}>{m.val}</div>
+                  <div style={{ fontSize: 40, fontWeight: 600, color: m.color, fontFamily: C.font, lineHeight: 1 }}>{m.val}</div>
                 </div>
               ))}
             </div>
@@ -319,14 +458,14 @@ export default function Dashboard() {
             center={mapCenter}
             zoom={11}
             style={{ height: "100%", width: "100%", background: C.bg }}
-            zoomControl={false}
+            zoomControl={true}
           >
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             />
             <MapController center={mapCenter} />
-
+            <ZoomControl position="bottomright" />
             {layers.fuel && LOCATIONS.filter(l => l.type === "fuel").map((loc, i) => (
               <CircleMarker key={`fuel-${i}`} center={[loc.lat, loc.lon]} radius={5}
                 pathOptions={{ color: C.amber, fillColor: C.amber, fillOpacity: 0.8, weight: 1 }}>
@@ -383,8 +522,77 @@ export default function Dashboard() {
                 </Popup>
               </CircleMarker>
             ))}
+            {simResults && simResults.atRisk.map((loc, i) => (
+              <CircleMarker key={`sim-${i}`} center={[loc.lat, loc.lon]} radius={8}
+                pathOptions={{ color: "#a855f7", fillColor: "#a855f7", fillOpacity: 0.35, weight: 2, dashArray: "4" }}>
+                <Popup>
+                  <div style={{ fontFamily: C.fontSans, fontSize: 12, maxWidth: 200 }}>
+                    <div style={{ fontWeight: 700, color: "#a855f7", marginBottom: 4 }}>⚠ SIMULATED RISK</div>
+                    <div style={{ fontWeight: 600, marginBottom: 2 }}>{loc.name}</div>
+                    <div style={{ fontSize: 11, color: "#555" }}>{loc.reason}</div>
+                  </div>
+                </Popup>
+              </CircleMarker>
+            ))}
           </MapContainer>
-
+          {simOpen && (
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 1000,
+              background: "rgba(13,10,25,0.97)", borderTop: "1px solid #a855f7",
+              padding: "16px 20px",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ color: "#a855f7", fontFamily: C.font, fontSize: 11, letterSpacing: 1 }}>◈ WHAT-IF SIMULATOR</span>
+                  <span style={{ fontSize: 10, color: C.muted, fontFamily: C.font }}>— predictive risk model</span>
+                </div>
+                <button onClick={() => { setSimOpen(false); clearSimulation(); }}
+                  style={{ background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 14 }}>✕</button>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px 120px", gap: 12, alignItems: "end" }}>
+                <div>
+                  <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 6 }}>SCENARIO</div>
+                  <select value={simScenario} onChange={e => { setSimScenario(e.target.value); clearSimulation(); }}
+                    style={{ width: "100%", background: C.surface2, border: `1px solid #a855f7`, color: C.text, fontFamily: C.font, fontSize: 11, padding: "6px 8px", borderRadius: 4 }}>
+                    <option value="weather">Weather severity increases</option>
+                    <option value="fuel_demand">Fuel demand spike</option>
+                    <option value="congestion">Road congestion worsens</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 6 }}>
+                    SEVERITY LEVEL — <span style={{ color: "#a855f7" }}>{simSeverity} / 5</span>
+                  </div>
+                  <input type="range" min={1} max={5} step={1} value={simSeverity}
+                    onChange={e => { setSimSeverity(Number(e.target.value)); clearSimulation(); }}
+                    style={{ width: "100%", accentColor: "#a855f7" }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: C.dim, fontFamily: C.font, marginTop: 2 }}>
+                    <span>Low</span><span>Moderate</span><span>Severe</span>
+                  </div>
+                </div>
+                <button onClick={runSimulation} disabled={simRunning}
+                  style={{ background: simRunning ? C.surface2 : "#2d1b4e", border: `1px solid #a855f7`, color: simRunning ? C.muted : "#d8b4fe", fontFamily: C.font, fontSize: 11, padding: "8px 12px", borderRadius: 4, cursor: simRunning ? "not-allowed" : "pointer" }}>
+                  {simRunning ? "RUNNING..." : "▶ RUN SIM"}
+                </button>
+                {simResults && (
+                  <button onClick={clearSimulation}
+                    style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 11, padding: "8px 12px", borderRadius: 4, cursor: "pointer" }}>
+                    ✕ CLEAR
+                  </button>
+                )}
+              </div>
+              {simResults && (
+                <div style={{ marginTop: 12, padding: "10px 12px", background: "#1a0d2e", borderRadius: 6, border: "1px solid #4c1d7a", display: "flex", alignItems: "center", gap: 16 }}>
+                  <span style={{ fontSize: 10, color: "#d8b4fe", fontFamily: C.font }}>◈ {simResults.atRisk.length} locations flagged at risk</span>
+                  <span style={{ fontSize: 10, color: "#a855f7", fontFamily: C.font }}>
+                    {simResults.atRisk.filter(l => l.riskLevel === "high").length} high · {simResults.atRisk.filter(l => l.riskLevel === "medium").length} medium
+                  </span>
+                  <span style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginLeft: "auto" }}>Purple dashed markers show projected impact</span>
+                </div>
+              )}
+            </div>
+          )}
+          
           <div style={{ position: "absolute", top: 12, left: 12, zIndex: 1000, display: "flex", flexDirection: "column", gap: 4 }}>
             {[
               { key: "fuel", label: "⛽ Fuel", color: C.amber },
@@ -409,7 +617,8 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div style={{ position: "absolute", bottom: 12, left: 12, zIndex: 1000, background: "rgba(15,22,35,0.92)", border: `1px solid ${C.border}`, borderRadius: 6, padding: "8px 12px" }}>
+          {/* Map legend */}
+          <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.92)", border: `1px solid ${C.border}`, borderRadius: 6, padding: "8px 12px" }}>
             {[
               { color: C.red, label: "Active disruption alert" },
               { color: C.amber, label: "Fuel station" },
