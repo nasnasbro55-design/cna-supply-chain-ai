@@ -3,26 +3,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaf
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ZoomControl } from 'react-leaflet';
 
-// Karina's real data (this is a subset, so swap for API call when Ethan's backend is ready)
-const LOCATIONS = [
-  { name: "Duke Street Liberty", type: "fuel", lat: 38.8126769, lon: -77.1258168 },
-  { name: "Exxon", type: "fuel", lat: 38.8175991, lon: -77.1424937 },
-  { name: "Sunoco", type: "fuel", lat: 38.8187069, lon: -77.1436155 },
-  { name: "Shell", type: "fuel", lat: 38.8099812, lon: -77.0506021 },
-  { name: "Old Town Mart", type: "fuel", lat: 38.8139433, lon: -77.0453786 },
-  { name: "Shell", type: "fuel", lat: 38.8132473, lon: -77.0449183 },
-  { name: "Liberty", type: "fuel", lat: 38.812518, lon: -77.044957 },
-  { name: "Exxon", type: "fuel", lat: 38.812123, lon: -77.045106 },
-  { name: "Sunoco", type: "fuel", lat: 38.8964189, lon: -77.0726392 },
-  { name: "Giant", type: "supermarket", lat: 38.991893, lon: -77.031655 },
-  { name: "Exxon", type: "fuel", lat: 38.9924832, lon: -77.0962555 },
-  { name: "Liberty", type: "fuel", lat: 38.9782024, lon: -77.0991976 },
-  { name: "Exxon", type: "fuel", lat: 38.9931627, lon: -77.023901 },
-  { name: "Safeway", type: "supermarket", lat: 38.8816, lon: -77.1074 },
-  { name: "Whole Foods", type: "supermarket", lat: 38.9072, lon: -77.0369 },
-  { name: "Harris Teeter", type: "supermarket", lat: 38.8648, lon: -77.1022 },
-  { name: "Trader Joe's", type: "supermarket", lat: 38.9015, lon: -77.0412 },
-];
+// Karina's real data 
+import LOCATIONS from './locations.json';
 
 const CAMERAS = [
   { name: "I-66 & Route 50", location: "Arlington VA", lat: 38.8816, lon: -77.1003, status: "congested" },

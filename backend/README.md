@@ -1,4 +1,18 @@
-# Backend — Flask API
-Owner: Ethan Cooper
+# Backend — Java API
 
-This Backend project is currently in design. Stay tuned as I will be announcing more infomation.
+This backend exposes a simple HTTP endpoint for `combined_data.json`.
+
+## Run local backend API
+
+From the repository root:
+
+```bash
+javac -d backend/classes backend/controllers/GetApiData.java
+java -cp backend/classes GetApiData
+```
+
+Then access:
+
+- `http://localhost:8080/api/data`
+
+This endpoint includes CORS headers for `http://localhost:3000` so the React app can call it from `localhost:3000`.

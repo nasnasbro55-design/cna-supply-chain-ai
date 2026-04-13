@@ -13,12 +13,20 @@ def fetch_weather():
     cleaned = []
     for alert in alerts:
         props = alert["properties"]
+        geometry = alert.get("geometry")
+        
+        # Check if geometry exists and log it
+        if geometry:
+            print(f"✅ Geometry found for: {props['event']}")
+        else:
+            print(f"⚠️ No geometry for: {props['event']} (NWS didn't provide polygon)")
+        
         cleaned.append({
             "event": props["event"],
             "headline": props["headline"],
             "severity": props["severity"],
             "area": props["areaDesc"],
-            "geometry": alert.get("geometry")
+            "geometry": geometry
         })
     
     with open("output/weather_alerts.json", "w") as f:
