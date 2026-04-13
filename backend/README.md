@@ -13,6 +13,6 @@ java -cp backend/classes GetApiData
 
 Then access:
 
-- `http://localhost:8080/api/data`
+- `http://localhost:2026/api/data`
 
 This endpoint includes CORS headers for `http://localhost:3000` so the React app can call it from `localhost:3000`.
