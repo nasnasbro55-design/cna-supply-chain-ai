@@ -4,7 +4,6 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, X
 import { ZoomControl } from 'react-leaflet';
 
 // Karina's real data 
-import LOCATIONS from './locations.json';
 
 const CAMERAS = [
   { name: "I-66 & Route 50", location: "Arlington VA", lat: 38.8816, lon: -77.1003, status: "congested" },
@@ -206,6 +205,17 @@ export default function Dashboard() {
     return () => clearInterval(sessionRef.current);
   }, []);
 
+  const [apiData, setApiData] = useState(null);
+  useEffect(() => {
+    fetch('http://localhost:2026/api/data')
+      .then(res => res.json())
+      .then(data => setApiData(data))
+      .catch(err => console.error('API error:', err));
+  }, []);
+
+  const LOCATIONS = apiData?.locations || [];
+  const WEATHER_ALERTS = apiData?.weather_alerts || [];
+  const CAMERAS = apiData?.cameras || [];
   const toggleLayer = (key) => setLayers(l => ({ ...l, [key]: !l[key] }));
 
   const runSimulation = () => {
@@ -617,7 +627,6 @@ export default function Dashboard() {
             ))}
           </div>
 
-          {/* Map legend */}
           <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.92)", border: `1px solid ${C.border}`, borderRadius: 6, padding: "8px 12px" }}>
             {[
               { color: C.red, label: "Active disruption alert" },
