@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ZoomControl } from 'react-leaflet';
+import NLP_DATA from './nlp_alerts.json';
 
 // Karina's real data 
 import LOCATIONS from './locations.json';
@@ -32,57 +33,8 @@ const WEATHER_ALERTS = [
   },
 ];
 
-//  Pretend NLP output (Jake's model, need to swap schema here when he responds) 
-const NLP_ALERTS = [
-  {
-    id: "nlp-001",
-    timestamp: "2026-04-09T14:18:00Z",
-    type: "fuel",
-    severity: "high",
-    location: { lat: 38.8816, lon: -77.1074, label: "Arlington, VA — I-66 corridor" },
-    sentiment_score: -0.87,
-    confidence: 0.91,
-    source_text: "Gas stations running completely dry along Route 50, lines stretching 2 blocks",
-    signals: 3,
-    disruption_detected: true,
-  },
-  {
-    id: "nlp-002",
-    timestamp: "2026-04-09T13:45:00Z",
-    type: "food",
-    severity: "medium",
-    location: { lat: 38.9182, lon: -77.2277, label: "Tysons, VA — supply delay" },
-    sentiment_score: -0.54,
-    confidence: 0.78,
-    source_text: "Giant and Safeway shelves emptying fast, restocking trucks not arriving",
-    signals: 2,
-    disruption_detected: true,
-  },
-  {
-    id: "nlp-003",
-    timestamp: "2026-04-09T13:22:00Z",
-    type: "fuel",
-    severity: "high",
-    location: { lat: 38.851, lon: -77.0502, label: "I-395 & Route 1 — congestion" },
-    sentiment_score: -0.79,
-    confidence: 0.85,
-    source_text: "I-395 completely gridlocked, fuel delivery trucks stuck for hours",
-    signals: 3,
-    disruption_detected: true,
-  },
-  {
-    id: "nlp-004",
-    timestamp: "2026-04-09T11:08:00Z",
-    type: "food",
-    severity: "low",
-    location: { lat: 38.8648, lon: -77.1022, label: "Alexandria — weather advisory" },
-    sentiment_score: -0.21,
-    confidence: 0.62,
-    source_text: "Some delays reported at local grocery stores due to icy roads",
-    signals: 1,
-    disruption_detected: true,
-  },
-];
+//  Jakes NLP Model, Modified by me  
+const NLP_ALERTS = NLP_DATA.alerts;
 
 const C = {
   bg: "#0f1623",

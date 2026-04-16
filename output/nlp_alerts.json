@@ -1,0 +1,588 @@
+{
+  "generated_at": "2026-04-16T23:18:22.708867Z",
+  "model": "role3_keyword_nlp_v1 + huggingface_vit",
+  "source": "CrisisMMD_v2.0",
+  "total_tweets_processed": 54,
+  "alerts": [
+    {
+      "id": "crisismmd_917791044158185473",
+      "timestamp": "2026-04-16T14:33:00.467031Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Clarendon, Arlington",
+        "lat": 38.8868,
+        "lon": -77.0958
+      },
+      "sentiment_score": -0.829,
+      "confidence": 0.952,
+      "disruption_score": 1.0,
+      "source_text": "RT @Gizmodo: Wildfires raging through Northern California are terrifying https://t.co/dI73RFzX2i https://t.co/k4KnvIimsU",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.947,
+        "ensemble_score": 0.6,
+        "model1_score": 0.868,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917791130590183424",
+      "timestamp": "2026-04-16T14:18:01.686622Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Falls Church, VA",
+        "lat": 38.8822,
+        "lon": -77.1711
+      },
+      "sentiment_score": -0.66,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "PHOTOS: Deadly wildfires rage in California https://t.co/td9xT3vXOL https://t.co/OimwAncLew",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "breakwater, groin, groyne, mole, bulwark, seawall, jetty",
+        "raw_label_disaster": "land_slide",
+        "confidence": 0.634,
+        "ensemble_score": 0.6,
+        "model1_score": 0.087,
+        "model2_score": 0.998
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917792930315821057",
+      "timestamp": "2026-04-16T13:03:07.689955Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Tysons, VA",
+        "lat": 38.9182,
+        "lon": -77.2277
+      },
+      "sentiment_score": -0.712,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "Mass Evacuations in California as Wildfires Kill at Least 10 https://t.co/gyoKFWZuMB #CaliforniaWildfires https://t.co/KEFtjITetK",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "fire screen, fireguard",
+        "raw_label_disaster": "fire",
+        "confidence": 0.793,
+        "ensemble_score": 1.0,
+        "model1_score": 0.482,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917793137925459968",
+      "timestamp": "2026-04-16T12:48:08.852269Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "I-395 & Route 1, Arlington",
+        "lat": 38.851,
+        "lon": -77.0502
+      },
+      "sentiment_score": -0.776,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "RT @KAKEnews: California wildfires destroy more than 50 structures: https://t.co/IkSrNpmT83 #KAKEnews https://t.co/8risKwbBqr",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "lumbermill, sawmill",
+        "raw_label_disaster": "fire",
+        "confidence": 0.63,
+        "ensemble_score": 0.6,
+        "model1_score": 0.075,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917793137925459968",
+      "timestamp": "2026-04-16T12:33:10.071457Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Alexandria, VA",
+        "lat": 38.8648,
+        "lon": -77.1022
+      },
+      "sentiment_score": -0.776,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "RT @KAKEnews: California wildfires destroy more than 50 structures: https://t.co/IkSrNpmT83 #KAKEnews https://t.co/8risKwbBqr",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.64,
+        "ensemble_score": 0.6,
+        "model1_score": 0.1,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917793137925459968",
+      "timestamp": "2026-04-16T12:18:11.252892Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Lee Highway, Arlington",
+        "lat": 38.889,
+        "lon": -77.102
+      },
+      "sentiment_score": -0.776,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "RT @KAKEnews: California wildfires destroy more than 50 structures: https://t.co/IkSrNpmT83 #KAKEnews https://t.co/8risKwbBqr",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "fountain",
+        "raw_label_disaster": "fire",
+        "confidence": 0.908,
+        "ensemble_score": 0.6,
+        "model1_score": 0.771,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917793881533571073",
+      "timestamp": "2026-04-16T11:48:13.605713Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Falls Church, VA",
+        "lat": 38.8822,
+        "lon": -77.1711
+      },
+      "sentiment_score": -0.838,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "Wildfires Still Burn in Northern California; 11 Are Dead https://t.co/8rx6aoC5Ix #nyt https://t.co/UtY33zQTES",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "torch",
+        "raw_label_disaster": "flood",
+        "confidence": 0.68,
+        "ensemble_score": 0.6,
+        "model1_score": 0.268,
+        "model2_score": 0.955
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917794232160661505",
+      "timestamp": "2026-04-16T11:18:16.080176Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Manassas, VA",
+        "lat": 38.751,
+        "lon": -77.4629
+      },
+      "sentiment_score": -0.838,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "At Least 11 Dead and 100 Missing as Wildfires Rage Across Northern California - Damage and death toll rises as ... https://t.co/r9xiSn2IcK",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "lumbermill, sawmill",
+        "raw_label_disaster": "fire",
+        "confidence": 0.654,
+        "ensemble_score": 0.6,
+        "model1_score": 0.139,
+        "model2_score": 0.997
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917794360581869569",
+      "timestamp": "2026-04-16T11:03:17.483332Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Woodbridge, VA",
+        "lat": 38.6543,
+        "lon": -77.2511
+      },
+      "sentiment_score": -0.771,
+      "confidence": 0.934,
+      "disruption_score": 1.0,
+      "source_text": "Southern California wildfires continue to rage as death toll rises to 11 https://t.co/idIRZsGZvX https://t.co/3zbQucj1UY",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.988,
+        "ensemble_score": 0.6,
+        "model1_score": 0.971,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917794892113498113",
+      "timestamp": "2026-04-16T10:33:20.189085Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Tysons, VA",
+        "lat": 38.9182,
+        "lon": -77.2277
+      },
+      "sentiment_score": -0.849,
+      "confidence": 0.957,
+      "disruption_score": 1.0,
+      "source_text": "RT @News12BX: California wildfires kill 10, destroy 1,500 buildings https://t.co/cKLrLVtXMe https://t.co/o1CGcHS57o",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.803,
+        "ensemble_score": 0.6,
+        "model1_score": 0.507,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917795236595863552",
+      "timestamp": "2026-04-16T10:03:22.708778Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Alexandria, VA",
+        "lat": 38.8648,
+        "lon": -77.1022
+      },
+      "sentiment_score": -0.894,
+      "confidence": 0.99,
+      "disruption_score": 1.0,
+      "source_text": "11 dead, thousands homeless as wildfires torch California wine country https://t.co/n4OrOaOgEV #Heatwave #Wildfires https://t.co/H1EmUrnzjF",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.741,
+        "ensemble_score": 0.6,
+        "model1_score": 0.352,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917794580728295424",
+      "timestamp": "2026-04-16T10:48:18.937038Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Arlington, VA \u2014 Route 50 corridor",
+        "lat": 38.8816,
+        "lon": -77.1074
+      },
+      "sentiment_score": -0.486,
+      "confidence": 0.952,
+      "disruption_score": 0.998,
+      "source_text": "More than 100 missing persons reports made in California\u00c2 wildfires https://t.co/614UWl30MO https://t.co/CBuNhzQ5xf",
+      "signals": 3,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.658,
+        "ensemble_score": 0.6,
+        "model1_score": 0.145,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917792147700465664",
+      "timestamp": "2026-04-16T13:18:06.395556Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Arlington, VA \u2014 Route 50 corridor",
+        "lat": 38.8816,
+        "lon": -77.1074
+      },
+      "sentiment_score": -0.64,
+      "confidence": 0.897,
+      "disruption_score": 0.983,
+      "source_text": "Wildfires Threaten California\u00e2\u20ac\u2122s First Legal Cannabis Harvest https://t.co/BSuAdfwN62 https://t.co/wNqfLrNmTp",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "fire",
+        "confidence": 0.776,
+        "ensemble_score": 0.6,
+        "model1_score": 0.44,
+        "model2_score": 1.0
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_901646496713584640",
+      "timestamp": "2026-04-16T19:47:35.042169Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Lee Highway, Arlington",
+        "lat": 38.889,
+        "lon": -77.102
+      },
+      "sentiment_score": -0.784,
+      "confidence": 0.837,
+      "disruption_score": 0.973,
+      "source_text": "1 dead as Harvey continues to churn over Texas https://t.co/Y6n4nVyF6L https://t.co/QKlZeYx0sz",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "volcano",
+        "raw_label_disaster": "land_slide",
+        "confidence": 0.933,
+        "ensemble_score": 0.6,
+        "model1_score": 0.837,
+        "model2_score": 0.997
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_905625230843846656",
+      "timestamp": "2026-04-16T15:32:55.632750Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Tysons, VA",
+        "lat": 38.9182,
+        "lon": -77.2277
+      },
+      "sentiment_score": -0.673,
+      "confidence": 0.906,
+      "disruption_score": 0.973,
+      "source_text": "RT @thehill: Puerto Rico could be without power for 4 to 6 months after Hurricane Irma https://t.co/tm849LpK7D https://t.co/SGdFIAs41b",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "pier",
+        "raw_label_disaster": "non_damage",
+        "confidence": 0.694,
+        "ensemble_score": 0.6,
+        "model1_score": 0.239,
+        "model2_score": 0.998
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_917794024173563904",
+      "timestamp": "2026-04-16T11:33:14.871607Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Fairfax, VA",
+        "lat": 38.8462,
+        "lon": -77.2997
+      },
+      "sentiment_score": -0.859,
+      "confidence": 0.959,
+      "disruption_score": 0.962,
+      "source_text": "Henry Cejudo suffers burns, loses gold medal in California wildfire \u00e2\u20ac\u201d https://t.co/GkuLc60ZWl https://t.co/0gRZgSK4LU",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "band aid",
+        "raw_label_disaster": "drought",
+        "confidence": 0.451,
+        "ensemble_score": 0.6,
+        "model1_score": 0.543,
+        "model2_score": 0.389
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_901646074527535105",
+      "timestamp": "2026-04-16T23:17:17.550915Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Arlington, VA \u2014 Route 50 corridor",
+        "lat": 38.8816,
+        "lon": -77.1074
+      },
+      "sentiment_score": -0.738,
+      "confidence": 0.825,
+      "disruption_score": 0.924,
+      "source_text": "RT @ajwamood: #ajwamood : Harvey the first major hurricane to strike the #US since 2005 , causes at least 1 fatality https://t.co/RvDkebyAAC",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "church, church building",
+        "raw_label_disaster": "flood",
+        "confidence": 0.734,
+        "ensemble_score": 0.6,
+        "model1_score": 0.341,
+        "model2_score": 0.997
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_901646074527535105",
+      "timestamp": "2026-04-16T22:32:21.669639Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Alexandria, VA",
+        "lat": 38.8648,
+        "lon": -77.1022
+      },
+      "sentiment_score": -0.738,
+      "confidence": 0.825,
+      "disruption_score": 0.924,
+      "source_text": "RT @ajwamood: #ajwamood : Harvey the first major hurricane to strike the #US since 2005 , causes at least 1 fatality https://t.co/RvDkebyAAC",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "mobile home, manufactured home",
+        "raw_label_disaster": "flood",
+        "confidence": 0.734,
+        "ensemble_score": 0.6,
+        "model1_score": 0.383,
+        "model2_score": 0.968
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_901646074527535105",
+      "timestamp": "2026-04-16T23:02:19.133636Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Tysons, VA",
+        "lat": 38.9182,
+        "lon": -77.2277
+      },
+      "sentiment_score": -0.738,
+      "confidence": 0.825,
+      "disruption_score": 0.914,
+      "source_text": "RT @ajwamood: #ajwamood : Harvey the first major hurricane to strike the #US since 2005 , causes at least 1 fatality https://t.co/RvDkebyAAC",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "pole",
+        "raw_label_disaster": "flood",
+        "confidence": 0.684,
+        "ensemble_score": 0.6,
+        "model1_score": 0.226,
+        "model2_score": 0.989
+      },
+      "multimodal": true
+    },
+    {
+      "id": "crisismmd_905625160904044549",
+      "timestamp": "2026-04-16T17:02:48.310918Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Clarendon, Arlington",
+        "lat": 38.8868,
+        "lon": -77.0958
+      },
+      "sentiment_score": -0.875,
+      "confidence": 0.865,
+      "disruption_score": 0.894,
+      "source_text": "RT @RawStory: Here are 6 terrifying reasons to fear Miami \u201a\u00c4\u00f2won\u201a\u00c4\u00f4t survive\u201a\u00c4\u00f4 #HurricaneIrma https://t.co/f88aWvM5Gi https://t.co/P5lK0fH4Dj",
+      "signals": 4,
+      "disruption_detected": true,
+      "source": "CrisisMMD",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "disaster_scene",
+        "raw_label_vit": "nematode, nematode worm, roundworm",
+        "raw_label_disaster": "flood",
+        "confidence": 0.442,
+        "ensemble_score": 0.6,
+        "model1_score": 0.077,
+        "model2_score": 0.685
+      },
+      "multimodal": true
+    }
+  ]
+}
