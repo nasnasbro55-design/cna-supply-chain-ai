@@ -8,53 +8,93 @@ from datetime import datetime
 NEGATIVE_WORDS = {
     "shortage", "empty", "out of gas", "no gas", "no food",
     "closed", "line", "lines", "long line", "panic", "crowded",
-    "delay", "blocked", "stuck", "traffic", "crisis", "emergency"
+    "delay", "blocked", "stuck", "traffic", "crisis", "emergency","evacuate", "evacuation", "destroyed", "damage", "dead", "missing", 
+    "rescue", "trapped", "flood", "fire", "hurricane", "wildfire", "disaster",
 }
 
 SUPPLY_CHAIN_WORDS = {
     "gas", "fuel", "grocery", "store", "supermarket",
-    "food", "water", "supplies", "station"
+    "food", "water", "supplies", "station", "emergency", "evacuation", "evacuate", "shelter", "relief", "damage", 
+    "destroyed", "flood", "fire", "hurricane", "wildfire", "disaster", "dead", 
+    "missing", "trapped", "rescue", "power", "homes", "structures"
 }
 
 
 def analyze_text(text: str) -> Dict[str, Any]:
-    """
-    Very simple text analysis:
-      - detect if it's about supply chain disruption
-      - estimate sentiment
-      - assign a crude confidence
-    """
-    text_lower = text.lower()
+    try:
+        from transformers import pipeline
+        import numpy as np
 
-    # sentiment
-    negative_hits = sum(1 for w in NEGATIVE_WORDS if w in text_lower)
-    supply_hits = sum(1 for w in SUPPLY_CHAIN_WORDS if w in text_lower)
+        sentiment_pipeline = pipeline(
+            "sentiment-analysis",
+            model="cardiffnlp/twitter-roberta-base-sentiment",
+            top_k=3
+        )
 
-    if negative_hits > 0:
-        sentiment = "negative"
-        sentiment_score = -0.5 - 0.1 * negative_hits
-    else:
-        sentiment = "neutral"
-        sentiment_score = 0.0
+        result = sentiment_pipeline(text[:512])[0]
 
-    # label: is this about supply chain disruption?
-    if supply_hits > 0 and negative_hits > 0:
-        label = "supply_chain_disruption"
-        confidence = min(0.5 + 0.1 * (negative_hits + supply_hits), 0.99)
-    elif supply_hits > 0:
-        label = "supply_chain_related"
-        confidence = min(0.4 + 0.1 * supply_hits, 0.9)
-    else:
-        label = "other"
-        confidence = 0.5
+        label_map = {"LABEL_0": "negative", "LABEL_1": "neutral", "LABEL_2": "positive"}
+        
+        scores = {r["label"]: r["score"] for r in result}
+        neg_score = scores.get("LABEL_0", 0)
+        neu_score = scores.get("LABEL_1", 0)
+        pos_score = scores.get("LABEL_2", 0)
 
-    return {
-        "label": label,
-        "confidence": round(confidence, 3),
-        "sentiment": sentiment,
-        "sentiment_score": round(sentiment_score, 3)
-    }
+        sentiment_score = round(-(neg_score) + pos_score, 3)
+        sentiment = "negative" if neg_score > 0.5 else "positive" if pos_score > 0.5 else "neutral"
 
+        text_lower = text.lower()
+        supply_hits = sum(1 for w in SUPPLY_CHAIN_WORDS if w in text_lower)
+        negative_hits = sum(1 for w in NEGATIVE_WORDS if w in text_lower)
+
+        if supply_hits > 0 and neg_score > 0.4:
+            label = "supply_chain_disruption"
+            confidence = min(0.5 + 0.3 * neg_score + 0.1 * supply_hits, 0.99)
+        elif supply_hits > 0:
+            label = "supply_chain_related"
+            confidence = min(0.4 + 0.1 * supply_hits, 0.9)
+        elif neg_score > 0.6:
+            label = "supply_chain_disruption"
+            confidence = min(0.4 + 0.2 * neg_score, 0.85)
+        else:
+            label = "other"
+            confidence = 0.5
+
+        return {
+            "label": label,
+            "confidence": round(confidence, 3),
+            "sentiment": sentiment,
+            "sentiment_score": round(sentiment_score, 3),
+            "neg_score": round(neg_score, 3),
+            "pos_score": round(pos_score, 3),
+        }
+
+    except Exception as e:
+        print(f"  Transformer error, falling back to keywords: {e}")
+        text_lower = text.lower()
+        negative_hits = sum(1 for w in NEGATIVE_WORDS if w in text_lower)
+        supply_hits = sum(1 for w in SUPPLY_CHAIN_WORDS if w in text_lower)
+        if negative_hits > 0:
+            sentiment = "negative"
+            sentiment_score = -0.5 - 0.1 * negative_hits
+        else:
+            sentiment = "neutral"
+            sentiment_score = 0.0
+        if supply_hits > 0 and negative_hits > 0:
+            label = "supply_chain_disruption"
+            confidence = min(0.5 + 0.1 * (negative_hits + supply_hits), 0.99)
+        elif supply_hits > 0:
+            label = "supply_chain_related"
+            confidence = min(0.4 + 0.1 * supply_hits, 0.9)
+        else:
+            label = "other"
+            confidence = 0.5
+        return {
+            "label": label,
+            "confidence": round(confidence, 3),
+            "sentiment": sentiment,
+            "sentiment_score": round(sentiment_score, 3),
+        }
 
 # Fake image analysis stub
 
