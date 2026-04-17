@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { ZoomControl } from 'react-leaflet';
 import NLP_DATA from './nlp_alerts.json';
 
-// Karina's real data 
-import LOCATIONS from './locations.json';
-
-const CAMERAS = [
+// Karina's real data
+const CAMERAS_FALLBACK = [
   { name: "I-66 & Route 50", location: "Arlington VA", lat: 38.8816, lon: -77.1003, status: "congested" },
   { name: "I-395 & Route 1", location: "Arlington VA", lat: 38.851, lon: -77.0502, status: "heavy" },
   { name: "Route 7 & Glebe Rd", location: "Arlington VA", lat: 38.8868, lon: -77.1172, status: "normal" },
@@ -18,67 +16,30 @@ const CAMERAS = [
   { name: "Route 28 & Centreville Rd", location: "Manassas VA", lat: 38.751, lon: -77.4629, status: "normal" },
 ];
 
-const WEATHER_ALERTS = [
-  {
-    event: "Special Weather Statement",
-    headline: "Special Weather Statement issued March 28 at 5:11AM EDT by NWS Baltimore MD/Washington DC",
-    severity: "Moderate",
-    area: "DC · Arlington · Fairfax · Falls Church · Alexandria",
-  },
-  {
-    event: "Freeze Warning",
-    headline: "Freeze Warning issued March 28 at 1:08PM EDT until March 29 at 10:00AM EDT by NWS Charleston WV",
-    severity: "Moderate",
-    area: "Western VA counties",
-  },
+const WEATHER_ALERTS_FALLBACK = [
+  { event: "Special Weather Statement", headline: "Special Weather Statement issued March 28 at 5:11AM EDT by NWS Baltimore MD/Washington DC", severity: "Moderate", area: "DC · Arlington · Fairfax · Falls Church · Alexandria" },
+  { event: "Freeze Warning", headline: "Freeze Warning issued March 28 at 1:08PM EDT until March 29 at 10:00AM EDT by NWS Charleston WV", severity: "Moderate", area: "Western VA counties" },
 ];
 
 //  Jakes NLP Model, Modified by me  
 const NLP_ALERTS = NLP_DATA.alerts;
 
 const C = {
-  bg: "#0f1623",
-  surface: "#131c2e",
-  surface2: "#1a2540",
-  border: "#1e2d45",
-  text: "#e2e8f0",
-  muted: "#64748b",
-  dim: "#334155",
-  red: "#ef4444",
-  redBg: "#7f1d1d",
-  redText: "#fca5a5",
-  amber: "#f59e0b",
-  amberBg: "#78350f",
-  amberText: "#fcd34d",
-  green: "#10b981",
-  greenBg: "#064e3b",
-  greenText: "#6ee7b7",
-  blue: "#3b82f6",
-  blueBg: "#1e3a5f",
-  blueText: "#93c5fd",
-  font: "'IBM Plex Mono', 'Courier New', monospace",
-  fontSans: "'DM Sans', system-ui, sans-serif",
+  bg: "#0f1623", surface: "#131c2e", surface2: "#1a2540", border: "#1e2d45",
+  text: "#e2e8f0", muted: "#64748b", dim: "#334155",
+  red: "#ef4444", redBg: "#7f1d1d", redText: "#fca5a5",
+  amber: "#f59e0b", amberBg: "#78350f", amberText: "#fcd34d",
+  green: "#10b981", greenBg: "#064e3b", greenText: "#6ee7b7",
+  blue: "#3b82f6", blueBg: "#1e3a5f", blueText: "#93c5fd",
+  font: "Arial, sans-serif",
+  fontSans: "Arial, sans-serif",
 };
 
-
-const severityColor = (s) =>
-  s === "high" ? C.red : s === "medium" ? C.amber : C.green;
-
-const severityBg = (s) =>
-  s === "high" ? C.redBg : s === "medium" ? C.amberBg : C.greenBg;
-
-const severityText = (s) =>
-  s === "high" ? C.redText : s === "medium" ? C.amberText : C.greenText;
-
-const cameraStatusColor = (s) =>
-  s === "heavy" ? C.red : s === "congested" ? C.amber : C.green;
-
-const formatTime = (iso) => {
-  const d = new Date(iso);
-  return d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
-};
-
-const sentScore = (score) => Math.round(Math.abs(score) * 100);
+const severityColor = (s) => s === "high" ? C.red : s === "medium" ? C.amber : C.green;
+const severityBg = (s) => s === "high" ? C.redBg : s === "medium" ? C.amberBg : C.greenBg;
+const severityText = (s) => s === "high" ? C.redText : s === "medium" ? C.amberText : C.greenText;
+const cameraStatusColor = (s) => s === "heavy" ? C.red : s === "congested" ? C.amber : C.green;
+const formatTime = (iso) => { const d = new Date(iso); return d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" }); };
 
 function LowBandwidthView({ alerts, weather, onExit }) {
   return (
@@ -91,9 +52,7 @@ function LowBandwidthView({ alerts, weather, onExit }) {
         <div style={{ color: "#ffff00", marginBottom: 6, fontSize: 11 }}>▶ ACTIVE ALERTS ({alerts.filter(a => a.disruption_detected).length})</div>
         {alerts.map((a, i) => (
           <div key={i} style={{ marginBottom: 8, paddingLeft: 8, borderLeft: `2px solid ${severityColor(a.severity)}` }}>
-            <div style={{ color: severityColor(a.severity), fontSize: 12, fontWeight: "bold" }}>
-              [{a.severity.toUpperCase()}] {a.location.label}
-            </div>
+            <div style={{ color: severityColor(a.severity), fontSize: 12, fontWeight: "bold" }}>[{a.severity.toUpperCase()}] {a.location.label}</div>
             <div style={{ fontSize: 11, opacity: 0.8 }}>Type: {a.type} · Score: {a.sentiment_score} · Confidence: {Math.round(a.confidence * 100)}%</div>
             <div style={{ fontSize: 10, opacity: 0.6 }}>"{a.source_text.substring(0, 80)}..."</div>
           </div>
@@ -102,15 +61,10 @@ function LowBandwidthView({ alerts, weather, onExit }) {
       <div style={{ marginBottom: 12 }}>
         <div style={{ color: "#ffff00", marginBottom: 6, fontSize: 11 }}>▶ WEATHER ({weather.length})</div>
         {weather.map((w, i) => (
-          <div key={i} style={{ marginBottom: 6, fontSize: 11, opacity: 0.9 }}>
-            [{w.severity.toUpperCase()}] {w.event} — {w.area}
-          </div>
+          <div key={i} style={{ marginBottom: 6, fontSize: 11, opacity: 0.9 }}>[{w.severity.toUpperCase()}] {w.event} — {w.area}</div>
         ))}
       </div>
-      <button
-        onClick={onExit}
-        style={{ background: "transparent", border: "1px solid #00ff00", color: "#00ff00", fontFamily: C.font, fontSize: 11, padding: "4px 12px", cursor: "pointer", marginTop: 8 }}
-      >
+      <button onClick={onExit} style={{ background: "transparent", border: "1px solid #00ff00", color: "#00ff00", fontFamily: C.font, fontSize: 11, padding: "4px 12px", cursor: "pointer", marginTop: 8 }}>
         ← EXIT LOW BANDWIDTH MODE
       </button>
     </div>
@@ -121,13 +75,8 @@ function FatigueBanner({ sessionMinutes }) {
   if (sessionMinutes < 360) return null;
   const hours = Math.floor(sessionMinutes / 60);
   return (
-    <div style={{
-      background: C.amberBg, borderBottom: `1px solid ${C.amber}`, padding: "6px 16px",
-      display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, fontFamily: C.font,
-    }}>
-      <span style={{ color: C.amberText }}>
-        ⚠ FATIGUE ALERT — Active session: {hours}h. Consider rotating with another operator.
-      </span>
+    <div style={{ background: C.amberBg, borderBottom: `1px solid ${C.amber}`, padding: "6px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, fontFamily: C.fontSans }}>
+      <span style={{ color: C.amberText }}>⚠ Fatigue alert — Active session: {hours}h. Consider rotating with another operator.</span>
       <span style={{ color: C.amber, opacity: 0.7 }}>Recommend hand-off</span>
     </div>
   );
@@ -139,9 +88,98 @@ function MapController({ center }) {
   return null;
 }
 
+function WeatherAlertItem({ alert, isLast }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div onClick={() => setExpanded(!expanded)} style={{ padding: "6px 12px", borderBottom: isLast ? "none" : `1px solid ${C.border}`, cursor: "pointer" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ fontSize: 13, color: C.amberText, fontWeight: 600 }}>{alert.event}</div>
+        <span style={{ fontSize: 9, color: C.dim }}>{expanded ? "▲" : "▼"}</span>
+      </div>
+      <div style={{ fontSize: 9, color: C.muted, marginTop: 2 }}>{alert.severity}</div>
+      {expanded && <div style={{ fontSize: 9, color: C.muted, lineHeight: 1.6, marginTop: 4 }}>{alert.area}</div>}
+    </div>
+  );
+}
+
+function buildCharts(nlpAlerts) {
+  return [
+    {
+      title: "Alerts by Severity",
+      render: () => (
+        <BarChart data={[
+          { severity: "High", count: nlpAlerts.filter(a => a.severity === "high").length },
+          { severity: "Medium", count: nlpAlerts.filter(a => a.severity === "medium").length },
+          { severity: "Low", count: nlpAlerts.filter(a => a.severity === "low").length },
+        ]} barSize={48} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" vertical={false} />
+          <XAxis dataKey="severity" tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} label={{ value: "Severity", position: "insideBottom", offset: -2, fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <YAxis tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} width={35} allowDecimals={false} label={{ value: "Alerts", angle: -90, position: "insideLeft", fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.fontSans }} />
+          <Bar dataKey="count" radius={0} label={{ position: "top", fill: C.text, fontSize: 13, fontWeight: 600, fontFamily: C.fontSans }}>
+            {[C.red, C.amber, C.green].map((color, i) => <Cell key={i} fill={color} />)}
+          </Bar>
+        </BarChart>
+      )
+    },
+    {
+      title: "Sentiment Score Over Time",
+      render: () => (
+        <LineChart data={[...nlpAlerts].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(a => ({
+          time: new Date(a.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+          score: Math.abs(a.sentiment_score),
+        }))} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
+          <XAxis dataKey="time" tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} label={{ value: "Time", position: "insideBottom", offset: -2, fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <YAxis tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} width={35} domain={[0, 1]} label={{ value: "Score", angle: -90, position: "insideLeft", fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.fontSans }} />
+          <Line type="monotone" dataKey="score" stroke={C.red} strokeWidth={2} dot={{ fill: C.red, r: 5 }} />
+        </LineChart>
+      )
+    },
+    {
+      title: "Fuel vs Food Disruptions",
+      extra: (
+        <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 4 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: C.muted, fontFamily: C.fontSans }}>
+            <div style={{ width: 10, height: 10, background: C.amber }} />Fuel ({nlpAlerts.filter(a => a.type === "fuel").length})
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: C.muted, fontFamily: C.fontSans }}>
+            <div style={{ width: 10, height: 10, background: C.green }} />Food ({nlpAlerts.filter(a => a.type === "food").length})
+          </div>
+        </div>
+      ),
+      render: () => (
+        <PieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+          <Pie data={[
+            { name: "Fuel", value: nlpAlerts.filter(a => a.type === "fuel").length },
+            { name: "Food", value: nlpAlerts.filter(a => a.type === "food").length },
+          ]} cx="50%" cy="45%" innerRadius={50} outerRadius={80} dataKey="value">
+            <Cell fill={C.amber} />
+            <Cell fill={C.green} />
+          </Pie>
+          <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.fontSans }} />
+        </PieChart>
+      )
+    },
+    {
+      title: "Model Confidence by Alert",
+      render: () => (
+        <AreaChart data={nlpAlerts.map((a, i) => ({ name: `Alert ${i + 1}`, confidence: Math.round(a.confidence * 100) }))} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e2d45" />
+          <XAxis dataKey="name" tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} label={{ value: "Alert", position: "insideBottom", offset: -2, fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <YAxis tick={{ fill: C.muted, fontSize: 11, fontFamily: C.fontSans }} axisLine={{ stroke: C.dim }} tickLine={false} width={40} domain={[0, 100]} unit="%" label={{ value: "Confidence", angle: -90, position: "insideLeft", fill: C.muted, fontSize: 10, fontFamily: C.fontSans }} />
+          <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.fontSans }} formatter={(v) => [`${v}%`, "Confidence"]} />
+          <Area type="monotone" dataKey="confidence" stroke={C.blue} fill={C.blueBg} strokeWidth={2} />
+        </AreaChart>
+      )
+    },
+  ];
+}
+
 export default function Dashboard() {
   const [layers, setLayers] = useState({ fuel: true, food: true, cameras: true, alerts: true, weather: false });
-  const [selectedAlert, setSelectedAlert] = useState(null);
+  const [openAlerts, setOpenAlerts] = useState(new Set());
   const [lowBandwidth, setLowBandwidth] = useState(false);
   const [sessionMinutes, setSessionMinutes] = useState(0);
   const [mapCenter] = useState([38.88, -77.1]);
@@ -151,12 +189,24 @@ export default function Dashboard() {
   const [simSeverity, setSimSeverity] = useState(3);
   const [simResults, setSimResults] = useState(null);
   const [simRunning, setSimRunning] = useState(false);
-  const [analyticsOpen, setAnalyticsOpen] = useState(false);
+  const [chartIndex, setChartIndex] = useState(0);
+  const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
     sessionRef.current = setInterval(() => setSessionMinutes(m => m + 1), 60000);
     return () => clearInterval(sessionRef.current);
   }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:2026/api/data')
+      .then(res => res.json())
+      .then(data => setApiData(data))
+      .catch(err => console.error('API error:', err));
+  }, []);
+
+  const LOCATIONS = apiData?.locations || [];
+  const WEATHER_ALERTS = apiData?.weather_alerts || WEATHER_ALERTS_FALLBACK;
+  const activeCameras = apiData?.cameras || CAMERAS_FALLBACK;
 
   const toggleLayer = (key) => setLayers(l => ({ ...l, [key]: !l[key] }));
 
@@ -172,23 +222,20 @@ export default function Dashboard() {
       } else if (simScenario === "fuel_demand") {
         const count = Math.ceil(fuelStations.length * (simSeverity / 5));
         fuelStations.slice(0, count).forEach(l => atRisk.push({ ...l, reason: "High demand exceeds available supply", riskLevel: simSeverity >= 4 ? "high" : "medium" }));
-      }  else if (simScenario === "congestion") {
-         const haversine = (lat1, lon1, lat2, lon2) => {
+      } else if (simScenario === "congestion") {
+        const haversine = (lat1, lon1, lat2, lon2) => {
           const R = 3958.8;
           const dLat = (lat2 - lat1) * Math.PI / 180;
           const dLon = (lon2 - lon1) * Math.PI / 180;
-          const a = Math.sin(dLat/2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) ** 2;
+          const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
           return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         };
-        const congestedCameras = CAMERAS.filter(c => c.status === "heavy" || c.status === "congested");
+        const congestedCameras = activeCameras.filter(c => c.status === "heavy" || c.status === "congested");
+        const camerasToUse = congestedCameras.length > 0 ? congestedCameras : activeCameras;
         const radiusMiles = simSeverity * 0.8;
         LOCATIONS.forEach(l => {
-          const nearCamera = congestedCameras.find(c => haversine(l.lat, l.lon, c.lat, c.lon) <= radiusMiles);
-          if (nearCamera) atRisk.push({
-            ...l,
-            reason: `Within ${radiusMiles.toFixed(1)}mi of congested camera: ${nearCamera.name}`,
-            riskLevel: simSeverity >= 4 ? "high" : "medium"
-          });
+          const nearCamera = camerasToUse.find(c => haversine(l.lat, l.lon, c.lat, c.lon) <= radiusMiles);
+          if (nearCamera) atRisk.push({ ...l, reason: `Within ${radiusMiles.toFixed(1)}mi of congested camera: ${nearCamera.name}`, riskLevel: simSeverity >= 4 ? "high" : "medium" });
         });
       }
       setSimResults({ atRisk, scenario: simScenario, severity: simSeverity, timestamp: new Date().toLocaleTimeString() });
@@ -202,10 +249,14 @@ export default function Dashboard() {
   const fuelNeg = Math.round(Math.abs(NLP_ALERTS.filter(a => a.type === "fuel").reduce((s, a) => s + a.sentiment_score, 0) / NLP_ALERTS.filter(a => a.type === "fuel").length) * 100);
   const foodNeg = Math.round(Math.abs(NLP_ALERTS.filter(a => a.type === "food").reduce((s, a) => s + a.sentiment_score, 0) / NLP_ALERTS.filter(a => a.type === "food").length) * 100);
 
+  const charts = buildCharts(NLP_ALERTS);
+  const currentChart = charts[chartIndex];
+
   if (lowBandwidth) return <LowBandwidthView alerts={NLP_ALERTS} weather={WEATHER_ALERTS} onExit={() => setLowBandwidth(false)} />;
 
   return (
     <div style={{ fontFamily: C.fontSans, background: C.bg, color: C.text, height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+
       <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 16px", height: 48, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 28, height: 28, background: C.blueBg, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🛡</div>
@@ -218,19 +269,9 @@ export default function Dashboard() {
             </span>
           )}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>
-            Session: {sessionMinutes}m
-          </span>
-          <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>
-            {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" })}
-          </span>
-          <button
-            onClick={() => setAnalyticsOpen(!analyticsOpen)}
-            style={{ background: analyticsOpen ? "#0d2d1a" : "transparent", border: `1px solid ${analyticsOpen ? C.green : C.dim}`, color: analyticsOpen ? C.green : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
-          >
-            ▲ ANALYTICS
-          </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>Session: {sessionMinutes}m</span>
+          <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" })}</span>
           <button
             onClick={() => { setSimOpen(!simOpen); clearSimulation(); }}
             style={{ background: simOpen ? "#2d1b4e" : "transparent", border: `1px solid ${simOpen ? "#a855f7" : C.dim}`, color: simOpen ? "#d8b4fe" : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
@@ -247,236 +288,120 @@ export default function Dashboard() {
       </div>
 
       <FatigueBanner sessionMinutes={sessionMinutes} />
-      {analyticsOpen && (
-        <div style={{ background: C.surface, borderBottom: `1px solid ${C.green}`, padding: "16px 20px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, flexShrink: 0 }}>
-          
-          
-          <div>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>ALERTS BY SEVERITY</div>
-            <ResponsiveContainer width="100%" height={120}>
-              <BarChart data={[
-                { severity: "High", count: NLP_ALERTS.filter(a => a.severity === "high").length, fill: C.red },
-                { severity: "Medium", count: NLP_ALERTS.filter(a => a.severity === "medium").length, fill: C.amber },
-                { severity: "Low", count: NLP_ALERTS.filter(a => a.severity === "low").length, fill: C.green },
-              ]}>
-                <XAxis dataKey="severity" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} />
-                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
-                <Bar dataKey="count" radius={[3, 3, 0, 0]}>
-                  {[C.red, C.amber, C.green].map((color, i) => <Cell key={i} fill={color} />)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
 
-          <div>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>SENTIMENT SCORE OVER TIME</div>
-            <ResponsiveContainer width="100%" height={120}>
-              <LineChart data={[...NLP_ALERTS].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(a => ({
-                time: new Date(a.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-                score: Math.abs(a.sentiment_score),
-                type: a.type,
-              }))}>
-                <XAxis dataKey="time" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={20} domain={[0, 1]} />
-                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
-                <Line type="monotone" dataKey="score" stroke={C.red} strokeWidth={2} dot={{ fill: C.red, r: 3 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>FUEL VS FOOD ALERTS</div>
-            <ResponsiveContainer width="100%" height={120}>
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: "Fuel", value: NLP_ALERTS.filter(a => a.type === "fuel").length },
-                    { name: "Food", value: NLP_ALERTS.filter(a => a.type === "food").length },
-                  ]}
-                  cx="50%" cy="50%" innerRadius={30} outerRadius={50} dataKey="value"
-                >
-                  <Cell fill={C.amber} />
-                  <Cell fill={C.green} />
-                </Pie>
-                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 4 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.amber }} />Fuel
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: C.muted, fontFamily: C.font }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green }} />Food
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>MODEL CONFIDENCE BY ALERT</div>
-            <ResponsiveContainer width="100%" height={120}>
-              <AreaChart data={NLP_ALERTS.map((a, i) => ({
-                name: `Alert ${i + 1}`,
-                confidence: Math.round(a.confidence * 100),
-              }))}>
-                <XAxis dataKey="name" tick={{ fill: C.muted, fontSize: 9, fontFamily: C.font }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: C.muted, fontSize: 9 }} axisLine={false} tickLine={false} width={25} domain={[0, 100]} />
-                <Tooltip contentStyle={{ background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 4, fontSize: 11, fontFamily: C.font }} />
-                <Area type="monotone" dataKey="confidence" stroke={C.blue} fill={C.blueBg} strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-
-        </div>
-      )}
-      <div style={{ display: "grid", gridTemplateColumns: "240px 1fr 240px", flex: 1, overflow: "hidden" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "300px 1fr 220px", flex: 1, overflow: "hidden" }}>
 
         <div style={{ background: C.surface, borderRight: `1px solid ${C.border}`, display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
-          <div style={{ padding: "8px 8px 0", borderBottom: `1px solid ${C.border}` }}>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, padding: "4px 4px 6px" }}>SUPPLY CHAIN STATUS</div>
+          <div style={{ padding: "8px 8px 0", borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
+            <div style={{ fontSize: 12, color: C.text, fontFamily: C.fontSans, fontWeight: 600, padding: "8px 4px 8px" }}>Supply Chain Status</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, paddingBottom: 10 }}>
               {[
                 { label: "Fuel sites", val: LOCATIONS.filter(l => l.type === "fuel").length, color: C.amber },
                 { label: "Food sites", val: LOCATIONS.filter(l => l.type === "supermarket").length, color: C.green },
                 { label: "High alerts", val: highAlerts, color: C.red },
-                { label: "Cameras", val: CAMERAS.length, color: C.blue },
+                { label: "Cameras", val: activeCameras.length, color: C.blue },
               ].map((m, i) => (
                 <div key={i} style={{ background: C.surface2, borderRadius: 6, padding: "8px 10px", border: `1px solid ${C.border}` }}>
-                  <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: .5, marginBottom: 4 }}>{m.label.toUpperCase()}</div>
-                  <div style={{ fontSize: 40, fontWeight: 600, color: m.color, fontFamily: C.font, lineHeight: 1 }}>{m.val}</div>
+                  <div style={{ fontSize: 13, color: C.muted, fontFamily: C.fontSans, fontWeight: 500, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>{m.label}</div>
+                  <div style={{ fontSize: 56, fontWeight: 700, color: m.color, fontFamily: C.fontSans, lineHeight: 1 }}>{m.val}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, padding: "8px 12px 4px" }}>ACTIVE ALERTS</div>
-          <div style={{ flex: 1, overflowY: "auto" }}>
+          <div style={{ fontSize: 12, color: C.text, fontFamily: C.fontSans, fontWeight: 600, padding: "10px 12px 6px", flexShrink: 0 }}>Active Alerts</div>
+          <div style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>
             {NLP_ALERTS.map((a) => (
               <div
                 key={a.id}
-                onClick={() => setSelectedAlert(selectedAlert?.id === a.id ? null : a)}
-                style={{
-                  padding: "10px 12px",
-                  borderBottom: `1px solid ${C.border}`,
-                  cursor: "pointer",
-                  background: selectedAlert?.id === a.id ? C.surface2 : "transparent",
-                  borderLeft: selectedAlert?.id === a.id ? `3px solid ${severityColor(a.severity)}` : "3px solid transparent",
-                  transition: "all 0.15s",
-                }}
+                onClick={() => setOpenAlerts(prev => {
+                  const next = new Set(prev);
+                  next.has(a.id) ? next.delete(a.id) : next.add(a.id);
+                  return next;
+                })}
+                style={{ padding: "14px 12px", borderBottom: `1px solid ${C.border}`, cursor: "pointer", background: openAlerts.has(a.id) ? C.surface2 : "transparent", borderLeft: openAlerts.has(a.id) ? `3px solid ${severityColor(a.severity)}` : "3px solid transparent", transition: "all 0.15s" }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
                   <div style={{ width: 7, height: 7, borderRadius: "50%", background: severityColor(a.severity), flexShrink: 0 }} />
                   <span style={{ fontSize: 11, fontWeight: 600, color: C.text }}>{a.location.label}</span>
                 </div>
-                <div style={{ fontSize: 10, color: C.muted, marginLeft: 13, marginBottom: 4, lineHeight: 1.4 }}>
-                  {a.source_text.substring(0, 65)}...
-                </div>
+                <div style={{ fontSize: 10, color: C.muted, marginLeft: 13, marginBottom: 4, lineHeight: 1.4 }}>{a.source_text.substring(0, 65)}...</div>
                 <div style={{ display: "flex", gap: 6, marginLeft: 13 }}>
-                  <span style={{ fontSize: 9, background: severityBg(a.severity), color: severityText(a.severity), padding: "1px 6px", borderRadius: 3, fontFamily: C.font }}>
-                    {a.severity.toUpperCase()}
-                  </span>
-                  <span style={{ fontSize: 9, background: C.surface2, color: C.muted, padding: "1px 6px", borderRadius: 3, fontFamily: C.font }}>
-                    {a.type.toUpperCase()}
-                  </span>
-                  <span style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginLeft: "auto" }}>
-                    {formatTime(a.timestamp)}
-                  </span>
+                  <span style={{ fontSize: 9, background: severityBg(a.severity), color: severityText(a.severity), padding: "1px 6px", borderRadius: 3, fontFamily: C.font }}>{a.severity.toUpperCase()}</span>
+                  <span style={{ fontSize: 9, background: C.surface2, color: C.muted, padding: "1px 6px", borderRadius: 3, fontFamily: C.font }}>{a.type.toUpperCase()}</span>
+                  <span style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginLeft: "auto" }}>{formatTime(a.timestamp)}</span>
                 </div>
-                {selectedAlert?.id === a.id && (
+                {openAlerts.has(a.id) && (
                   <div style={{ marginTop: 8, marginLeft: 13, padding: 8, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
                     <div style={{ fontSize: 10, color: C.muted, fontFamily: C.font, marginBottom: 4 }}>NLP ANALYSIS</div>
-                    <div style={{ fontSize: 10, color: C.text, marginBottom: 3 }}>
-                      Sentiment: <span style={{ color: C.red, fontFamily: C.font }}>{a.sentiment_score}</span>
-                    </div>
-                    <div style={{ fontSize: 10, color: C.text, marginBottom: 3 }}>
-                      Confidence: <span style={{ color: C.green, fontFamily: C.font }}>{Math.round(a.confidence * 100)}%</span>
-                    </div>
-                    <div style={{ fontSize: 10, color: C.text }}>
-                      Signals: <span style={{ color: C.amber, fontFamily: C.font }}>{a.signals} converging</span>
-                    </div>
-                    <div style={{ fontSize: 9, color: C.muted, marginTop: 6, fontStyle: "italic", lineHeight: 1.4 }}>
-                      "{a.source_text}"
-                    </div>
+                    <div style={{ fontSize: 10, color: C.text, marginBottom: 3 }}>Sentiment: <span style={{ color: C.red, fontFamily: C.font }}>{a.sentiment_score}</span></div>
+                    <div style={{ fontSize: 10, color: C.text, marginBottom: 3 }}>Confidence: <span style={{ color: C.green, fontFamily: C.font }}>{Math.round(a.confidence * 100)}%</span></div>
+                    <div style={{ fontSize: 10, color: C.text }}>Signals: <span style={{ color: C.amber, fontFamily: C.font }}>{a.signals} converging</span></div>
+                    <div style={{ fontSize: 9, color: C.muted, marginTop: 6, fontStyle: "italic", lineHeight: 1.4 }}>"{a.source_text}"</div>
                   </div>
                 )}
               </div>
             ))}
           </div>
+
+          <div style={{ borderTop: `1px solid ${C.border}`, background: C.surface, flexShrink: 0, padding: "12px 12px 10px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+              <div style={{ fontSize: 12, color: C.text, fontFamily: C.fontSans, fontWeight: 600 }}>{currentChart.title}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button onClick={() => setChartIndex(i => (i - 1 + charts.length) % charts.length)}
+                  style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 14, width: 26, height: 26, borderRadius: 3, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>‹</button>
+                <span style={{ fontSize: 10, color: C.muted, fontFamily: C.font }}>{chartIndex + 1} / {charts.length}</span>
+                <button onClick={() => setChartIndex(i => (i + 1) % charts.length)}
+                  style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 14, width: 26, height: 26, borderRadius: 3, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>›</button>
+              </div>
+            </div>
+            {currentChart.extra || null}
+            <ResponsiveContainer width="100%" height={200}>
+              {currentChart.render()}
+            </ResponsiveContainer>
+          </div>
         </div>
 
         <div style={{ position: "relative" }}>
-          <MapContainer
-            center={mapCenter}
-            zoom={11}
-            style={{ height: "100%", width: "100%", background: C.bg }}
-            zoomControl={true}
-          >
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            />
+          <MapContainer center={mapCenter} zoom={11} style={{ height: "100%", width: "100%", background: C.bg }} zoomControl={true}>
+            <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" attribution='&copy; <a href="https://carto.com/">CARTO</a>' />
             <MapController center={mapCenter} />
             <ZoomControl position="bottomright" />
+
             {layers.fuel && LOCATIONS.filter(l => l.type === "fuel").map((loc, i) => (
-              <CircleMarker key={`fuel-${i}`} center={[loc.lat, loc.lon]} radius={5}
-                pathOptions={{ color: C.amber, fillColor: C.amber, fillOpacity: 0.8, weight: 1 }}>
-                <Popup>
-                  <div style={{ fontFamily: C.fontSans, fontSize: 12 }}>
-                    <strong>{loc.name}</strong><br />
-                    <span style={{ color: "#888" }}>Fuel station</span><br />
-                    {loc.lat.toFixed(4)}, {loc.lon.toFixed(4)}
-                  </div>
-                </Popup>
+              <CircleMarker key={`fuel-${i}`} center={[loc.lat, loc.lon]} radius={5} pathOptions={{ color: C.amber, fillColor: C.amber, fillOpacity: 0.8, weight: 1 }}>
+                <Popup><div style={{ fontFamily: C.fontSans, fontSize: 12 }}><strong>{loc.name}</strong><br /><span style={{ color: "#888" }}>Fuel station</span><br />{loc.lat.toFixed(4)}, {loc.lon.toFixed(4)}</div></Popup>
               </CircleMarker>
             ))}
 
             {layers.food && LOCATIONS.filter(l => l.type === "supermarket").map((loc, i) => (
-              <CircleMarker key={`food-${i}`} center={[loc.lat, loc.lon]} radius={5}
-                pathOptions={{ color: C.green, fillColor: C.green, fillOpacity: 0.8, weight: 1 }}>
-                <Popup>
-                  <div style={{ fontFamily: C.fontSans, fontSize: 12 }}>
-                    <strong>{loc.name}</strong><br />
-                    <span style={{ color: "#888" }}>Supermarket</span>
-                  </div>
-                </Popup>
+              <CircleMarker key={`food-${i}`} center={[loc.lat, loc.lon]} radius={5} pathOptions={{ color: C.green, fillColor: C.green, fillOpacity: 0.8, weight: 1 }}>
+                <Popup><div style={{ fontFamily: C.fontSans, fontSize: 12 }}><strong>{loc.name}</strong><br /><span style={{ color: "#888" }}>Supermarket</span></div></Popup>
               </CircleMarker>
             ))}
 
-            {layers.cameras && CAMERAS.map((cam, i) => (
-              <CircleMarker key={`cam-${i}`} center={[cam.lat, cam.lon]} radius={5}
-                pathOptions={{ color: C.blue, fillColor: C.blue, fillOpacity: 0.7, weight: 1 }}>
-                <Popup>
-                  <div style={{ fontFamily: C.fontSans, fontSize: 12 }}>
-                    <strong>{cam.name}</strong><br />
-                    <span style={{ color: "#888" }}>{cam.location}</span><br />
-                    Status: <strong style={{ color: cameraStatusColor(cam.status) }}>{cam.status}</strong>
-                  </div>
-                </Popup>
+            {layers.cameras && activeCameras.map((cam, i) => (
+              <CircleMarker key={`cam-${i}`} center={[cam.lat, cam.lon]} radius={5} pathOptions={{ color: C.blue, fillColor: C.blue, fillOpacity: 0.7, weight: 1 }}>
+                <Popup><div style={{ fontFamily: C.fontSans, fontSize: 12 }}><strong>{cam.name}</strong><br /><span style={{ color: "#888" }}>{cam.location}</span><br />Status: <strong style={{ color: cameraStatusColor(cam.status) }}>{cam.status}</strong></div></Popup>
               </CircleMarker>
             ))}
 
             {layers.alerts && NLP_ALERTS.filter(a => a.disruption_detected).map((a) => (
-              <CircleMarker key={a.id} center={[a.location.lat, a.location.lon]}
-                radius={a.severity === "high" ? 14 : 10}
-                pathOptions={{ color: severityColor(a.severity), fillColor: severityColor(a.severity), fillOpacity: 0.25, weight: 2 }}>
+              <CircleMarker key={a.id} center={[a.location.lat, a.location.lon]} radius={a.severity === "high" ? 14 : 10} pathOptions={{ color: severityColor(a.severity), fillColor: severityColor(a.severity), fillOpacity: 0.25, weight: 2 }}>
                 <Popup>
                   <div style={{ fontFamily: C.fontSans, fontSize: 12, maxWidth: 220 }}>
                     <div style={{ fontWeight: 700, marginBottom: 4 }}>{a.location.label}</div>
-                    <div style={{ color: severityColor(a.severity), fontSize: 11, marginBottom: 4 }}>
-                      {a.severity.toUpperCase()} — {a.type.toUpperCase()} DISRUPTION
-                    </div>
+                    <div style={{ color: severityColor(a.severity), fontSize: 11, marginBottom: 4 }}>{a.severity.toUpperCase()} — {a.type.toUpperCase()} DISRUPTION</div>
                     <div style={{ fontSize: 11, color: "#555", marginBottom: 6 }}>"{a.source_text}"</div>
-                    <div style={{ fontSize: 10, color: "#888" }}>
-                      Sentiment: {a.sentiment_score} · Confidence: {Math.round(a.confidence * 100)}%
-                    </div>
+                    <div style={{ fontSize: 10, color: "#888" }}>Sentiment: {a.sentiment_score} · Confidence: {Math.round(a.confidence * 100)}%</div>
                   </div>
                 </Popup>
               </CircleMarker>
             ))}
+
             {simResults && simResults.atRisk.map((loc, i) => (
-              <CircleMarker key={`sim-${i}`} center={[loc.lat, loc.lon]} radius={8}
-                pathOptions={{ color: "#a855f7", fillColor: "#a855f7", fillOpacity: 0.35, weight: 2, dashArray: "4" }}>
+              <CircleMarker key={`sim-${i}`} center={[loc.lat, loc.lon]} radius={8} pathOptions={{ color: "#a855f7", fillColor: "#a855f7", fillOpacity: 0.35, weight: 2, dashArray: "4" }}>
                 <Popup>
                   <div style={{ fontFamily: C.fontSans, fontSize: 12, maxWidth: 200 }}>
                     <div style={{ fontWeight: 700, color: "#a855f7", marginBottom: 4 }}>⚠ SIMULATED RISK</div>
@@ -487,64 +412,58 @@ export default function Dashboard() {
               </CircleMarker>
             ))}
           </MapContainer>
+
           {simOpen && (
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 1000,
-              background: "rgba(13,10,25,0.97)", borderTop: "1px solid #a855f7",
-              padding: "16px 20px",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 1000, background: "rgba(13,10,25,0.97)", borderTop: "1px solid #a855f7", padding: "16px 20px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ color: "#a855f7", fontFamily: C.font, fontSize: 11, letterSpacing: 1 }}>◈ WHAT-IF SIMULATOR</span>
-                  <span style={{ fontSize: 10, color: C.muted, fontFamily: C.font }}>— predictive risk model</span>
+                  <span style={{ fontSize: 10, color: C.muted, fontFamily: C.fontSans }}>— predictive risk model</span>
                 </div>
-                <button onClick={() => { setSimOpen(false); clearSimulation(); }}
-                  style={{ background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 14 }}>✕</button>
+                <button onClick={() => { setSimOpen(false); clearSimulation(); }} style={{ background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 16 }}>✕</button>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px 120px", gap: 12, alignItems: "end" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 130px 130px", gap: 12, alignItems: "end" }}>
                 <div>
-                  <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 6 }}>SCENARIO</div>
+                  <div style={{ fontSize: 11, color: C.muted, fontFamily: C.fontSans, marginBottom: 6 }}>Scenario</div>
                   <select value={simScenario} onChange={e => { setSimScenario(e.target.value); clearSimulation(); }}
-                    style={{ width: "100%", background: C.surface2, border: `1px solid #a855f7`, color: C.text, fontFamily: C.font, fontSize: 11, padding: "6px 8px", borderRadius: 4 }}>
+                    style={{ width: "100%", background: C.surface2, border: `1px solid #a855f7`, color: C.text, fontFamily: C.fontSans, fontSize: 12, padding: "8px 10px", borderRadius: 4 }}>
                     <option value="weather">Weather severity increases</option>
                     <option value="fuel_demand">Fuel demand spike</option>
                     <option value="congestion">Road congestion worsens</option>
                   </select>
                 </div>
                 <div>
-                  <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 6 }}>
-                    SEVERITY LEVEL — <span style={{ color: "#a855f7" }}>{simSeverity} / 5</span>
+                  <div style={{ fontSize: 11, color: C.muted, fontFamily: C.fontSans, marginBottom: 6 }}>
+                    Severity level — <span style={{ color: "#a855f7", fontWeight: 600 }}>{simSeverity} / 5</span>
                   </div>
                   <input type="range" min={1} max={5} step={1} value={simSeverity}
                     onChange={e => { setSimSeverity(Number(e.target.value)); clearSimulation(); }}
                     style={{ width: "100%", accentColor: "#a855f7" }} />
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: C.dim, fontFamily: C.font, marginTop: 2 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.dim, fontFamily: C.fontSans, marginTop: 3 }}>
                     <span>Low</span><span>Moderate</span><span>Severe</span>
                   </div>
                 </div>
                 <button onClick={runSimulation} disabled={simRunning}
-                  style={{ background: simRunning ? C.surface2 : "#2d1b4e", border: `1px solid #a855f7`, color: simRunning ? C.muted : "#d8b4fe", fontFamily: C.font, fontSize: 11, padding: "8px 12px", borderRadius: 4, cursor: simRunning ? "not-allowed" : "pointer" }}>
-                  {simRunning ? "RUNNING..." : "▶ RUN SIM"}
+                  style={{ background: simRunning ? C.surface2 : "#2d1b4e", border: `1px solid #a855f7`, color: simRunning ? C.muted : "#d8b4fe", fontFamily: C.fontSans, fontSize: 12, padding: "10px 12px", borderRadius: 4, cursor: simRunning ? "not-allowed" : "pointer" }}>
+                  {simRunning ? "Running..." : "▶ Run simulation"}
                 </button>
                 {simResults && (
-                  <button onClick={clearSimulation}
-                    style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 11, padding: "8px 12px", borderRadius: 4, cursor: "pointer" }}>
-                    ✕ CLEAR
+                  <button onClick={clearSimulation} style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.fontSans, fontSize: 12, padding: "10px 12px", borderRadius: 4, cursor: "pointer" }}>
+                    ✕ Clear
                   </button>
                 )}
               </div>
               {simResults && (
-                <div style={{ marginTop: 12, padding: "10px 12px", background: "#1a0d2e", borderRadius: 6, border: "1px solid #4c1d7a", display: "flex", alignItems: "center", gap: 16 }}>
-                  <span style={{ fontSize: 10, color: "#d8b4fe", fontFamily: C.font }}>◈ {simResults.atRisk.length} locations flagged at risk</span>
-                  <span style={{ fontSize: 10, color: "#a855f7", fontFamily: C.font }}>
-                    {simResults.atRisk.filter(l => l.riskLevel === "high").length} high · {simResults.atRisk.filter(l => l.riskLevel === "medium").length} medium
-                  </span>
-                  <span style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginLeft: "auto" }}>Purple dashed markers show projected impact</span>
+                <div style={{ marginTop: 14, padding: "12px 16px", background: "#1a0d2e", borderRadius: 6, border: "1px solid #4c1d7a", display: "flex", alignItems: "center", gap: 20 }}>
+                  <span style={{ fontSize: 12, color: "#d8b4fe", fontFamily: C.fontSans, fontWeight: 600 }}>{simResults.atRisk.length} locations flagged at risk</span>
+                  <span style={{ fontSize: 12, color: C.muted, fontFamily: C.fontSans }}>High: <strong style={{ color: C.red }}>{simResults.atRisk.filter(l => l.riskLevel === "high").length}</strong></span>
+                  <span style={{ fontSize: 12, color: C.muted, fontFamily: C.fontSans }}>Medium: <strong style={{ color: C.amber }}>{simResults.atRisk.filter(l => l.riskLevel === "medium").length}</strong></span>
+                  <span style={{ fontSize: 10, color: C.dim, fontFamily: C.fontSans, marginLeft: "auto" }}>Purple dashed markers show projected impact</span>
                 </div>
               )}
             </div>
           )}
-          
+
           <div style={{ position: "absolute", top: 12, left: 12, zIndex: 1000, display: "flex", flexDirection: "column", gap: 4 }}>
             {[
               { key: "fuel", label: "⛽ Fuel", color: C.amber },
@@ -552,49 +471,39 @@ export default function Dashboard() {
               { key: "cameras", label: "📷 Cameras", color: C.blue },
               { key: "alerts", label: "🔴 Alerts", color: C.red },
             ].map(({ key, label, color }) => (
-              <button
-                key={key}
-                onClick={() => toggleLayer(key)}
-                style={{
-                  background: layers[key] ? C.surface2 : C.surface,
-                  border: `1px solid ${layers[key] ? color : C.border}`,
-                  color: layers[key] ? color : C.muted,
-                  fontFamily: C.font, fontSize: 10, padding: "5px 10px",
-                  borderRadius: 4, cursor: "pointer", textAlign: "left",
-                  transition: "all 0.15s", letterSpacing: .5,
-                }}
-              >
+              <button key={key} onClick={() => toggleLayer(key)}
+                style={{ background: layers[key] ? C.surface2 : C.surface, border: `1px solid ${layers[key] ? color : C.border}`, color: layers[key] ? color : C.muted, fontFamily: C.font, fontSize: 10, padding: "5px 10px", borderRadius: 4, cursor: "pointer", textAlign: "left", transition: "all 0.15s", letterSpacing: .5 }}>
                 {label}
               </button>
             ))}
           </div>
 
-          {/* Map legend */}
-          <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.92)", border: `1px solid ${C.border}`, borderRadius: 6, padding: "8px 12px" }}>
-            {[
+            <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.95)", border: `1px solid ${C.border}`, borderRadius: 8, padding: "14px 18px" }}>
+              {[
               { color: C.red, label: "Active disruption alert" },
               { color: C.amber, label: "Fuel station" },
               { color: C.green, label: "Food / grocery" },
               { color: C.blue, label: "Traffic camera" },
+              { color: "#a855f7", label: "Simulated risk" },
             ].map(({ color, label }) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 10, color: C.muted, marginBottom: 3 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: C.muted, marginBottom: 3 }}>
+                <div style={{ width: 11, height: 11, borderRadius: "50%", background: color, flexShrink: 0 }} />
                 {label}
               </div>
             ))}
           </div>
         </div>
 
-        <div style={{ background: C.surface, borderLeft: `1px solid ${C.border}`, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ background: C.surface, borderLeft: `1px solid ${C.border}`, display: "flex", flexDirection: "column", overflowY: "auto" }}>
 
           <div style={{ borderBottom: `1px solid ${C.border}`, padding: "8px 12px 12px" }}>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 8 }}>NLP SENTIMENT ANALYSIS</div>
+            <div style={{ fontSize: 14, color: C.text, fontFamily: C.fontSans, fontWeight: 600, marginBottom: 8 }}>NLP Sentiment Analysis</div>
             {[
               { label: "Fuel supply — negative signal", pct: fuelNeg, color: C.red },
               { label: "Food supply — negative signal", pct: foodNeg, color: C.amber },
             ].map(({ label, pct, color }) => (
               <div key={label} style={{ marginBottom: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: C.muted, marginBottom: 4 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: C.muted, marginBottom: 4 }}>
                   <span>{label}</span>
                   <span style={{ color, fontFamily: C.font }}>{pct}%</span>
                 </div>
@@ -603,54 +512,27 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-            <div style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginTop: 4 }}>
-              Source: CrisisMMD · {NLP_ALERTS.length} posts analyzed
-            </div>
+            <div style={{ fontSize: 9, color: C.dim, fontFamily: C.font, marginTop: 4 }}>Source: CrisisMMD · {NLP_ALERTS.length} posts analyzed</div>
           </div>
 
           <div style={{ borderBottom: `1px solid ${C.border}` }}>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, padding: "8px 12px 4px" }}>WEATHER ALERTS</div>
+            <div style={{ fontSize: 14, color: C.text, fontFamily: C.fontSans, fontWeight: 600, padding: "8px 12px 4px" }}>Weather Alerts</div>
             {WEATHER_ALERTS.map((w, i) => (
-              <div key={i} style={{ padding: "8px 12px", borderBottom: i < WEATHER_ALERTS.length - 1 ? `1px solid ${C.border}` : "none" }}>
-                <div style={{ fontSize: 11, color: C.amberText, fontWeight: 600, marginBottom: 2 }}>{w.event}</div>
-                <div style={{ fontSize: 10, color: C.muted, lineHeight: 1.4 }}>{w.area}</div>
-              </div>
+              <WeatherAlertItem key={i} alert={w} isLast={i === WEATHER_ALERTS.length - 1} />
             ))}
           </div>
 
-          <div style={{ borderBottom: `1px solid ${C.border}`, flex: 1, overflowY: "auto" }}>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, padding: "8px 12px 4px" }}>
-              TRAFFIC CAMERAS — {CAMERAS.length} FEEDS
-            </div>
-            {CAMERAS.map((cam, i) => (
-              <div key={i} style={{ padding: "7px 12px", borderBottom: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ fontSize: 11, color: C.text }}>{cam.name}</div>
-                  <div style={{ fontSize: 10, color: C.muted }}>{cam.location}</div>
+          <div style={{ borderBottom: `1px solid ${C.border}` }}>
+            <div style={{ fontSize: 14, color: C.text, fontFamily: C.fontSans, fontWeight: 600, padding: "8px 12px 4px" }}>Traffic Cameras — {activeCameras.length} feeds</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, padding: "4px 8px 8px" }}>
+              {activeCameras.map((cam, i) => (
+                <div key={i} style={{ padding: "5px 6px", background: C.surface2, borderRadius: 4, margin: 2, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ fontSize: 12, color: C.text, fontWeight: 500 }}>{cam.name}</div>
+                    <div style={{ fontSize: 9, color: C.muted }}>{cam.location}</div>
+                  </div>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: cameraStatusColor(cam.status), flexShrink: 0, marginLeft: 4 }} />
                 </div>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: cameraStatusColor(cam.status), flexShrink: 0 }} />
-              </div>
-            ))}
-          </div>
-
-          <div style={{ padding: "8px 12px" }}>
-            <div style={{ fontSize: 9, color: C.muted, fontFamily: C.font, letterSpacing: 1, marginBottom: 6 }}>DATA LAYERS</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-              {Object.keys(layers).map((key) => (
-                <button
-                  key={key}
-                  onClick={() => toggleLayer(key)}
-                  style={{
-                    background: layers[key] ? C.blueBg : "transparent",
-                    border: `1px solid ${layers[key] ? C.blue : C.dim}`,
-                    color: layers[key] ? C.blueText : C.muted,
-                    fontFamily: C.font, fontSize: 9, padding: "3px 8px",
-                    borderRadius: 3, cursor: "pointer", letterSpacing: .5,
-                    transition: "all 0.15s",
-                  }}
-                >
-                  {key.toUpperCase()}
-                </button>
               ))}
             </div>
           </div>
