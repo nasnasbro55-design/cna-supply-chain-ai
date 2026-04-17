@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaf
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { ZoomControl } from 'react-leaflet';
 import NLP_DATA from './nlp_alerts.json';
+import LOCATIONS_DATA from './locations.json';
 
 // Karina's real data
 const CAMERAS_FALLBACK = [
@@ -21,7 +22,7 @@ const WEATHER_ALERTS_FALLBACK = [
   { event: "Freeze Warning", headline: "Freeze Warning issued March 28 at 1:08PM EDT until March 29 at 10:00AM EDT by NWS Charleston WV", severity: "Moderate", area: "Western VA counties" },
 ];
 
-//  Jakes NLP Model, Modified by me  
+//  NLP output (Jake's model, modified by Naz)
 const NLP_ALERTS = NLP_DATA.alerts;
 
 const C = {
@@ -43,7 +44,7 @@ const formatTime = (iso) => { const d = new Date(iso); return d.toLocaleTimeStri
 
 function LowBandwidthView({ alerts, weather, onExit }) {
   return (
-    <div style={{ background: "#000", color: "#00ff00", fontFamily: C.font, fontSize: 13, padding: 16, minHeight: "100vh" }}>
+    <div style={{ background: "#000", color: "#00ff00", fontFamily: C.font, fontSize: 13, padding: 16, minHeight: "100vh", overflowY: "auto", maxHeight: "100vh" }}>
       <div style={{ borderBottom: "1px solid #00ff00", paddingBottom: 8, marginBottom: 12 }}>
         <div style={{ fontSize: 11, opacity: 0.6 }}>LOW BANDWIDTH MODE — CNA SUPPLY CHAIN MONITOR</div>
         <div style={{ fontSize: 10, opacity: 0.4 }}>DC/NoVA · {new Date().toLocaleTimeString()}</div>
@@ -93,7 +94,7 @@ function WeatherAlertItem({ alert, isLast }) {
   return (
     <div onClick={() => setExpanded(!expanded)} style={{ padding: "6px 12px", borderBottom: isLast ? "none" : `1px solid ${C.border}`, cursor: "pointer" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 13, color: C.amberText, fontWeight: 600 }}>{alert.event}</div>
+        <div style={{ fontSize: 11, color: C.amberText, fontWeight: 600 }}>{alert.event}</div>
         <span style={{ fontSize: 9, color: C.dim }}>{expanded ? "▲" : "▼"}</span>
       </div>
       <div style={{ fontSize: 9, color: C.muted, marginTop: 2 }}>{alert.severity}</div>
@@ -204,7 +205,7 @@ export default function Dashboard() {
       .catch(err => console.error('API error:', err));
   }, []);
 
-  const LOCATIONS = apiData?.locations || [];
+  const LOCATIONS = apiData?.locations || LOCATIONS_DATA || [];
   const WEATHER_ALERTS = apiData?.weather_alerts || WEATHER_ALERTS_FALLBACK;
   const activeCameras = apiData?.cameras || CAMERAS_FALLBACK;
 
@@ -246,8 +247,10 @@ export default function Dashboard() {
   const clearSimulation = () => setSimResults(null);
 
   const highAlerts = NLP_ALERTS.filter(a => a.severity === "high").length;
-  const fuelNeg = Math.round(Math.abs(NLP_ALERTS.filter(a => a.type === "fuel").reduce((s, a) => s + a.sentiment_score, 0) / NLP_ALERTS.filter(a => a.type === "fuel").length) * 100);
-  const foodNeg = Math.round(Math.abs(NLP_ALERTS.filter(a => a.type === "food").reduce((s, a) => s + a.sentiment_score, 0) / NLP_ALERTS.filter(a => a.type === "food").length) * 100);
+  const fuelAlerts = NLP_ALERTS.filter(a => a.type === "fuel");
+  const foodAlerts = NLP_ALERTS.filter(a => a.type === "food");
+  const fuelNeg = fuelAlerts.length > 0 ? Math.round(Math.abs(fuelAlerts.reduce((s, a) => s + a.sentiment_score, 0) / fuelAlerts.length) * 100) : 0;
+  const foodNeg = foodAlerts.length > 0 ? Math.round(Math.abs(foodAlerts.reduce((s, a) => s + a.sentiment_score, 0) / foodAlerts.length) * 100) : 0;
 
   const charts = buildCharts(NLP_ALERTS);
   const currentChart = charts[chartIndex];
@@ -478,8 +481,8 @@ export default function Dashboard() {
             ))}
           </div>
 
-            <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.95)", border: `1px solid ${C.border}`, borderRadius: 8, padding: "14px 18px" }}>
-              {[
+          <div style={{ position: "absolute", top: 12, right: 12, zIndex: 1000, background: "rgba(15,22,35,0.95)", border: `1px solid ${C.border}`, borderRadius: 8, padding: "14px 18px" }}>
+            {[
               { color: C.red, label: "Active disruption alert" },
               { color: C.amber, label: "Fuel station" },
               { color: C.green, label: "Food / grocery" },
