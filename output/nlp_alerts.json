@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-17T18:44:32.371465Z",
+  "generated_at": "2026-04-17T22:04:58.618143Z",
   "model": "twitter-roberta-base-sentiment + ensemble_vit_disaster",
   "source": "CrisisMMD_validated_DC_NoVA",
   "total_scenarios_processed": 10,
   "alerts": [
     {
       "id": "nova_nova_001",
-      "timestamp": "2026-04-17T16:44:13.049702Z",
+      "timestamp": "2026-04-17T20:04:50.414824Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -16,24 +16,21 @@
       },
       "sentiment_score": -0.862,
       "confidence": 0.99,
-      "disruption_score": 1.0,
+      "disruption_score": 0.893,
       "source_text": "Gas stations running completely dry along Route 50 in Arlington, long lines stretching 2 blocks, people panicking about fuel shortage",
-      "signals": 4,
+      "signals": 3,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "church, church building",
-        "raw_label_disaster": "flood",
-        "confidence": 0.734,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
+      "multimodal": false
     },
     {
       "id": "nova_nova_003",
-      "timestamp": "2026-04-17T14:44:13.050085Z",
+      "timestamp": "2026-04-17T18:04:50.414973Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -43,24 +40,21 @@
       },
       "sentiment_score": -0.829,
       "confidence": 0.99,
-      "disruption_score": 1.0,
+      "disruption_score": 0.893,
       "source_text": "I-395 completely gridlocked at Route 1, fuel delivery trucks blocked for hours, gas station on Columbia Pike running out",
-      "signals": 4,
+      "signals": 3,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "lakeside, lakeshore",
-        "raw_label_disaster": "flood",
-        "confidence": 0.741,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
+      "multimodal": false
     },
     {
       "id": "nova_nova_004",
-      "timestamp": "2026-04-17T12:44:13.050086Z",
+      "timestamp": "2026-04-17T16:04:50.414974Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -70,24 +64,21 @@
       },
       "sentiment_score": -0.499,
       "confidence": 0.99,
-      "disruption_score": 1.0,
+      "disruption_score": 0.893,
       "source_text": "Some delays at grocery stores in Alexandria due to icy roads, limited food supplies but stores still open",
-      "signals": 3,
+      "signals": 2,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "breakwater, groin, groyne, mole, bulwark, seawall, jetty",
-        "raw_label_disaster": "land_slide",
-        "confidence": 0.634,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
+      "multimodal": false
     },
     {
       "id": "nova_nova_005",
-      "timestamp": "2026-04-17T17:44:13.050088Z",
+      "timestamp": "2026-04-17T21:04:50.414975Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -97,132 +88,21 @@
       },
       "sentiment_score": -0.768,
       "confidence": 0.99,
-      "disruption_score": 1.0,
+      "disruption_score": 0.893,
       "source_text": "Exxon on Lee Highway completely out of gas, line of cars blocking intersection, emergency fuel shortage developing",
-      "signals": 4,
+      "signals": 3,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "volcano",
-        "raw_label_disaster": "land_slide",
-        "confidence": 0.933,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
-    },
-    {
-      "id": "nova_nova_007",
-      "timestamp": "2026-04-17T13:44:13.050090Z",
-      "type": "fuel",
-      "severity": "high",
-      "location": {
-        "label": "Route 7, Falls Church",
-        "lat": 38.8822,
-        "lon": -77.1711
-      },
-      "sentiment_score": -0.829,
-      "confidence": 0.99,
-      "disruption_score": 1.0,
-      "source_text": "Route 7 near Falls Church blocked by accident, gas delivery trucks unable to reach fuel stations, shortage imminent",
-      "signals": 4,
-      "disruption_detected": true,
-      "source": "CrisisMMD_validated",
-      "label": "supply_chain_disruption",
-      "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "fire screen, fireguard",
-        "raw_label_disaster": "fire",
-        "confidence": 0.793,
-        "ensemble_score": 1.0
-      },
-      "multimodal": true
-    },
-    {
-      "id": "nova_nova_008",
-      "timestamp": "2026-04-17T14:59:13.050091Z",
-      "type": "food",
-      "severity": "high",
-      "location": {
-        "label": "Woodbridge, VA",
-        "lat": 38.6543,
-        "lon": -77.2511
-      },
-      "sentiment_score": -0.885,
-      "confidence": 0.99,
-      "disruption_score": 1.0,
-      "source_text": "Walmart in Woodbridge completely sold out of water and canned food, emergency supply chain disruption confirmed",
-      "signals": 4,
-      "disruption_detected": true,
-      "source": "CrisisMMD_validated",
-      "label": "supply_chain_disruption",
-      "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "wreck",
-        "raw_label_disaster": "flood",
-        "confidence": 0.797,
-        "ensemble_score": 0.6
-      },
-      "multimodal": true
-    },
-    {
-      "id": "nova_nova_009",
-      "timestamp": "2026-04-17T14:29:13.050093Z",
-      "type": "fuel",
-      "severity": "high",
-      "location": {
-        "label": "Fairfax, VA",
-        "lat": 38.8462,
-        "lon": -77.2997
-      },
-      "sentiment_score": -0.73,
-      "confidence": 0.99,
-      "disruption_score": 1.0,
-      "source_text": "Multiple gas stations in Fairfax reporting empty tanks, fuel delivery delayed due to road closures and emergency",
-      "signals": 4,
-      "disruption_detected": true,
-      "source": "CrisisMMD_validated",
-      "label": "supply_chain_disruption",
-      "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "lumbermill, sawmill",
-        "raw_label_disaster": "fire",
-        "confidence": 0.63,
-        "ensemble_score": 0.6
-      },
-      "multimodal": true
-    },
-    {
-      "id": "nova_nova_010",
-      "timestamp": "2026-04-17T13:14:13.050094Z",
-      "type": "food",
-      "severity": "high",
-      "location": {
-        "label": "Manassas, VA",
-        "lat": 38.751,
-        "lon": -77.4629
-      },
-      "sentiment_score": -0.78,
-      "confidence": 0.99,
-      "disruption_score": 1.0,
-      "source_text": "Manassas area grocery stores struggling with food supply deliveries, shelves emptying fast during emergency",
-      "signals": 4,
-      "disruption_detected": true,
-      "source": "CrisisMMD_validated",
-      "label": "supply_chain_disruption",
-      "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "pier",
-        "raw_label_disaster": "non_damage",
-        "confidence": 0.694,
-        "ensemble_score": 0.6
-      },
-      "multimodal": true
+      "multimodal": false
     },
     {
       "id": "nova_nova_006",
-      "timestamp": "2026-04-17T16:14:13.050089Z",
+      "timestamp": "2026-04-17T19:34:50.414977Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -232,24 +112,117 @@
       },
       "sentiment_score": -0.824,
       "confidence": 0.99,
-      "disruption_score": 0.983,
+      "disruption_score": 0.893,
       "source_text": "Whole Foods in Clarendon running low on emergency food supplies, crowds panic buying water and food",
-      "signals": 4,
+      "signals": 3,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "coil, spiral, volute, whorl, helix",
-        "raw_label_disaster": "fire",
-        "confidence": 0.451,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
+      "multimodal": false
+    },
+    {
+      "id": "nova_nova_007",
+      "timestamp": "2026-04-17T17:04:50.414978Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Route 7, Falls Church",
+        "lat": 38.8822,
+        "lon": -77.1711
+      },
+      "sentiment_score": -0.829,
+      "confidence": 0.99,
+      "disruption_score": 0.893,
+      "source_text": "Route 7 near Falls Church blocked by accident, gas delivery trucks unable to reach fuel stations, shortage imminent",
+      "signals": 3,
+      "disruption_detected": true,
+      "source": "CrisisMMD_validated",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "unknown",
+        "confidence": 0.5
+      },
+      "multimodal": false
+    },
+    {
+      "id": "nova_nova_008",
+      "timestamp": "2026-04-17T18:19:50.414979Z",
+      "type": "food",
+      "severity": "high",
+      "location": {
+        "label": "Woodbridge, VA",
+        "lat": 38.6543,
+        "lon": -77.2511
+      },
+      "sentiment_score": -0.885,
+      "confidence": 0.99,
+      "disruption_score": 0.893,
+      "source_text": "Walmart in Woodbridge completely sold out of water and canned food, emergency supply chain disruption confirmed",
+      "signals": 3,
+      "disruption_detected": true,
+      "source": "CrisisMMD_validated",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "unknown",
+        "confidence": 0.5
+      },
+      "multimodal": false
+    },
+    {
+      "id": "nova_nova_009",
+      "timestamp": "2026-04-17T17:49:50.414980Z",
+      "type": "fuel",
+      "severity": "high",
+      "location": {
+        "label": "Fairfax, VA",
+        "lat": 38.8462,
+        "lon": -77.2997
+      },
+      "sentiment_score": -0.73,
+      "confidence": 0.99,
+      "disruption_score": 0.893,
+      "source_text": "Multiple gas stations in Fairfax reporting empty tanks, fuel delivery delayed due to road closures and emergency",
+      "signals": 3,
+      "disruption_detected": true,
+      "source": "CrisisMMD_validated",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "unknown",
+        "confidence": 0.5
+      },
+      "multimodal": false
+    },
+    {
+      "id": "nova_nova_010",
+      "timestamp": "2026-04-17T16:34:50.414981Z",
+      "type": "food",
+      "severity": "high",
+      "location": {
+        "label": "Manassas, VA",
+        "lat": 38.751,
+        "lon": -77.4629
+      },
+      "sentiment_score": -0.78,
+      "confidence": 0.99,
+      "disruption_score": 0.893,
+      "source_text": "Manassas area grocery stores struggling with food supply deliveries, shelves emptying fast during emergency",
+      "signals": 3,
+      "disruption_detected": true,
+      "source": "CrisisMMD_validated",
+      "label": "supply_chain_disruption",
+      "image_analysis": {
+        "label": "unknown",
+        "confidence": 0.5
+      },
+      "multimodal": false
     },
     {
       "id": "nova_nova_002",
-      "timestamp": "2026-04-17T15:44:13.050083Z",
+      "timestamp": "2026-04-17T19:04:50.414971Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -259,20 +232,17 @@
       },
       "sentiment_score": -0.756,
       "confidence": 0.932,
-      "disruption_score": 0.955,
+      "disruption_score": 0.852,
       "source_text": "Giant and Safeway shelves completely empty in Tysons, restocking trucks stuck in traffic, no food supplies coming in",
-      "signals": 4,
+      "signals": 3,
       "disruption_detected": true,
       "source": "CrisisMMD_validated",
       "label": "supply_chain_disruption",
       "image_analysis": {
-        "label": "disaster_scene",
-        "raw_label_vit": "magnetic compass",
-        "raw_label_disaster": "flood",
-        "confidence": 0.511,
-        "ensemble_score": 0.6
+        "label": "unknown",
+        "confidence": 0.5
       },
-      "multimodal": true
+      "multimodal": false
     }
   ]
 }

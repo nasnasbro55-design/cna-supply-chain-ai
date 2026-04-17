@@ -22,8 +22,6 @@ const WEATHER_ALERTS_FALLBACK = [
   { event: "Freeze Warning", headline: "Freeze Warning issued March 28 at 1:08PM EDT until March 29 at 10:00AM EDT by NWS Charleston WV", severity: "Moderate", area: "Western VA counties" },
 ];
 
-//  NLP output (Jake's model, modified by Naz)
-const NLP_ALERTS = NLP_DATA.alerts;
 
 const C = {
   bg: "#0f1623", surface: "#131c2e", surface2: "#1a2540", border: "#1e2d45",
@@ -192,6 +190,10 @@ export default function Dashboard() {
   const [simRunning, setSimRunning] = useState(false);
   const [chartIndex, setChartIndex] = useState(0);
   const [apiData, setApiData] = useState(null);
+  const [nlpData, setNlpData] = useState(null);
+  //  NLP output (Jake's model, modified by Naz)
+  const NLP_ALERTS = nlpData?.alerts || NLP_DATA.alerts;
+
 
   useEffect(() => {
     sessionRef.current = setInterval(() => setSessionMinutes(m => m + 1), 60000);
@@ -203,6 +205,13 @@ export default function Dashboard() {
       .then(res => res.json())
       .then(data => setApiData(data))
       .catch(err => console.error('API error:', err));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:2027/api/alerts')
+      .then(res => res.json())
+      .then(data => setNlpData(data))
+      .catch(err => console.error('NLP API error:', err));
   }, []);
 
   const LOCATIONS = apiData?.locations || LOCATIONS_DATA || [];
@@ -275,6 +284,18 @@ export default function Dashboard() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>Session: {sessionMinutes}m</span>
           <span style={{ fontSize: 11, color: C.muted, fontFamily: C.font }}>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" })}</span>
+          <button
+            onClick={() => {
+              fetch('http://localhost:2027/api/refresh', { method: 'POST' })
+                .then(() => fetch('http://localhost:2027/api/alerts'))
+                .then(res => res.json())
+                .then(data => setNlpData(data.alerts ? data : { alerts: data }))
+                .catch(err => console.error('Refresh error:', err));
+            }}            
+            style={{ background: "transparent", border: `1px solid ${C.dim}`, color: C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
+          >
+            ↺ REFRESH
+          </button>
           <button
             onClick={() => { setSimOpen(!simOpen); clearSimulation(); }}
             style={{ background: simOpen ? "#2d1b4e" : "transparent", border: `1px solid ${simOpen ? "#a855f7" : C.dim}`, color: simOpen ? "#d8b4fe" : C.muted, fontFamily: C.font, fontSize: 10, padding: "4px 10px", borderRadius: 4, cursor: "pointer", letterSpacing: 1 }}
