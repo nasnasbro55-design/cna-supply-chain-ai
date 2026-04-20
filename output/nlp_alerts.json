@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-17T22:04:58.618143Z",
+  "generated_at": "2026-04-18T11:10:10.356033Z",
   "model": "twitter-roberta-base-sentiment + ensemble_vit_disaster",
   "source": "CrisisMMD_validated_DC_NoVA",
   "total_scenarios_processed": 10,
   "alerts": [
     {
       "id": "nova_nova_001",
-      "timestamp": "2026-04-17T20:04:50.414824Z",
+      "timestamp": "2026-04-18T09:09:47.412029Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -30,7 +30,7 @@
     },
     {
       "id": "nova_nova_003",
-      "timestamp": "2026-04-17T18:04:50.414973Z",
+      "timestamp": "2026-04-18T07:09:47.414933Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -54,7 +54,7 @@
     },
     {
       "id": "nova_nova_004",
-      "timestamp": "2026-04-17T16:04:50.414974Z",
+      "timestamp": "2026-04-18T05:09:47.414940Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -78,7 +78,7 @@
     },
     {
       "id": "nova_nova_005",
-      "timestamp": "2026-04-17T21:04:50.414975Z",
+      "timestamp": "2026-04-18T10:09:47.414947Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -102,7 +102,7 @@
     },
     {
       "id": "nova_nova_006",
-      "timestamp": "2026-04-17T19:34:50.414977Z",
+      "timestamp": "2026-04-18T08:39:47.414954Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -126,7 +126,7 @@
     },
     {
       "id": "nova_nova_007",
-      "timestamp": "2026-04-17T17:04:50.414978Z",
+      "timestamp": "2026-04-18T06:09:47.414963Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -150,7 +150,7 @@
     },
     {
       "id": "nova_nova_008",
-      "timestamp": "2026-04-17T18:19:50.414979Z",
+      "timestamp": "2026-04-18T07:24:47.414969Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -174,7 +174,7 @@
     },
     {
       "id": "nova_nova_009",
-      "timestamp": "2026-04-17T17:49:50.414980Z",
+      "timestamp": "2026-04-18T06:54:47.414976Z",
       "type": "fuel",
       "severity": "high",
       "location": {
@@ -198,7 +198,7 @@
     },
     {
       "id": "nova_nova_010",
-      "timestamp": "2026-04-17T16:34:50.414981Z",
+      "timestamp": "2026-04-18T05:39:47.414982Z",
       "type": "food",
       "severity": "high",
       "location": {
@@ -222,7 +222,7 @@
     },
     {
       "id": "nova_nova_002",
-      "timestamp": "2026-04-17T19:04:50.414971Z",
+      "timestamp": "2026-04-18T08:09:47.414923Z",
       "type": "food",
       "severity": "high",
       "location": {

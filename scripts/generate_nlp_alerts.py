@@ -9,6 +9,20 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'models'))
 from role3_model import analyze_text, fuse_signals
 
 CRISISMMD_PATH = os.path.expanduser("~/Downloads/CrisisMMD_v2.0")
+ANNOTATIONS_PATH = os.path.join(CRISISMMD_PATH, "annotations")
+
+DC_NOVA_LOCATIONS = [
+    {"label": "Arlington, VA — Route 50 corridor", "lat": 38.8816, "lon": -77.1074},
+    {"label": "Tysons, VA", "lat": 38.9182, "lon": -77.2277},
+    {"label": "I-395 & Route 1, Arlington", "lat": 38.851, "lon": -77.0502},
+    {"label": "Alexandria, VA", "lat": 38.8648, "lon": -77.1022},
+    {"label": "Lee Highway, Arlington", "lat": 38.889, "lon": -77.102},
+    {"label": "Clarendon, Arlington", "lat": 38.8868, "lon": -77.0958},
+    {"label": "Falls Church, VA", "lat": 38.8822, "lon": -77.1711},
+    {"label": "Fairfax, VA", "lat": 38.8462, "lon": -77.2997},
+    {"label": "Manassas, VA", "lat": 38.751, "lon": -77.4629},
+    {"label": "Woodbridge, VA", "lat": 38.6543, "lon": -77.2511},
+]
 
 def analyze_image_huggingface(image_path):
     try:
@@ -22,18 +36,20 @@ def analyze_image_huggingface(image_path):
         print(f"  Analyzing image: {image_path}")
         img = Image.open(full_path).convert("RGB")
 
-        disaster_keywords = ["flood", "fire", "smoke", "damage", "debris",
-                           "emergency", "rescue", "storm", "hurricane",
-                           "destruction", "wildfire", "earthquake", "tornado",
+        disaster_keywords = ["flood", "fire", "smoke", "damage", "debris", 
+                           "emergency", "rescue", "storm", "hurricane", 
+                           "destruction", "wildfire", "earthquake", "tornado", 
                            "disaster", "cyclone", "drought"]
 
-        classifier1 = pipeline("image-classification",
+        # Model 1 — General ViT
+        classifier1 = pipeline("image-classification", 
                                model="google/vit-base-patch16-224", top_k=1)
         result1 = classifier1(img)[0]
         label1 = result1["label"].lower()
         score1 = result1["score"]
         is_disaster1 = any(kw in label1 for kw in disaster_keywords)
 
+        # Model 2 — Disaster-specific classifier
         try:
             classifier2 = pipeline("image-classification",
                                   model="imashauthum/disaster-image-classifications", top_k=1)
@@ -42,11 +58,12 @@ def analyze_image_huggingface(image_path):
             score2 = result2["score"]
             is_disaster2 = any(kw in label2 for kw in disaster_keywords) or label2 not in ["normal", "other", "none"]
         except Exception as e:
-            print(f"  Model 2 failed: {e}")
+            print(f"  Model 2 failed, using Model 1 only: {e}")
             label2 = "unknown"
             score2 = 0.5
             is_disaster2 = is_disaster1
 
+        # Ensemble — weighted average (disaster model gets more weight)
         ensemble_disaster = (0.4 * float(is_disaster1) + 0.6 * float(is_disaster2))
         is_disaster_final = ensemble_disaster >= 0.5
         ensemble_confidence = round((0.4 * score1 + 0.6 * score2), 3)
@@ -57,11 +74,44 @@ def analyze_image_huggingface(image_path):
             "raw_label_disaster": label2,
             "confidence": ensemble_confidence,
             "ensemble_score": round(ensemble_disaster, 3),
+            "model1_score": round(score1, 3),
+            "model2_score": round(score2, 3),
         }
 
     except Exception as e:
         print(f"  Image analysis error: {e}")
         return {"label": "unknown", "confidence": 0.5}
+    
+def load_crisis_tweets(tsv_file, max_rows=50):
+    tweets = []
+    try:
+        with open(tsv_file, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f, delimiter='\t')
+            for i, row in enumerate(reader):
+                if i >= max_rows:
+                    break
+                text = row.get('tweet_text', '').strip()
+                human_label = row.get('text_human', '').strip()
+                text_info = row.get('text_info', '').strip()
+
+                if not text:
+                    continue
+
+                if human_label in ['food_water_and_shelter', 'infrastructure_and_utility_damage', 'rescue_volunteering_or_donation_effort'] and text_info == 'informative':
+                    tweets.append({
+                        'tweet_id': row.get('tweet_id', f'tweet_{i}'),
+                        'text': text,
+                        'image_path': row.get('image_path', ''),
+                        'text_label': text_info,
+                        'human_label': human_label,
+                        'damage': row.get('image_damage', ''),
+                    })
+    except Exception as e:
+        print(f"Error reading {tsv_file}: {e}")
+    return tweets
+
+def assign_nova_location(index):
+    return DC_NOVA_LOCATIONS[index % len(DC_NOVA_LOCATIONS)]
 
 def determine_supply_chain_type(text, human_label=""):
     if human_label == "food_water_and_shelter":
@@ -165,12 +215,16 @@ def generate_alerts():
     alerts = []
     for i, scenario in enumerate(DC_NOVA_SCENARIOS):
         print(f"Processing {i+1}/{len(DC_NOVA_SCENARIOS)}: {scenario['text'][:60]}...")
+
         text_analysis = analyze_text(scenario['text'])
+
         if use_images and scenario.get('image_path'):
             image_analysis = analyze_image_huggingface(scenario['image_path'])
         else:
             image_analysis = {"label": "unknown", "confidence": 0.5}
+
         fusion = fuse_signals(text_analysis, image_analysis)
+
         alert = {
             "id": f"nova_{scenario['tweet_id']}",
             "timestamp": scenario["timestamp"],
@@ -213,6 +267,7 @@ def generate_alerts():
     print("\nAlert summary:")
     for a in alerts:
         print(f"  [{a['severity'].upper()}] {a['location']['label']} — {a['type']} — score: {a['disruption_score']}")
+
 
 if __name__ == "__main__":
     generate_alerts()
